@@ -1,7 +1,59 @@
 import React, { Component } from 'react'
 import { Container, Row, Col, Form, Card, Button } from 'react-bootstrap'
+import axios from 'axios'
 
 class AjoutCapteur extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      data: null
+    }
+  }
+
+  componentDidMount() {
+      // Call our fetch function below once the component mounts
+    this.callBackendAPI()
+      .then(res => this.setState({ data: res.express }))
+      .catch(err => console.log(err));
+  }
+    // Fetches our GET route from the Express server. (Note the route we are fetching matches the GET route from server.js
+  callBackendAPI = async () => {
+    const response = await fetch('/express_backend');
+    const body = await response.json();
+
+    if (response.status !== 200) {
+      throw Error(body.message)
+    }
+    return body
+  }
+
+  onFormSubmit(e) {
+    e.preventDefault()
+
+    let nomCapteur = document.getElementById('nomCapteur').value
+    let refModele = document.getElementById('refModele').value
+    let constructeur = document.getElementById('constructeur').value
+    let typeMesure = document.getElementById('typeMesure').value
+    let uniteMesure = document.getElementById('uniteMesure').value
+    let reseau = document.getElementById('reseau').value
+    let positionGps = document.getElementById('positionGps').value
+
+    let data = {
+      "nomCapteur": nomCapteur,
+      "refModele": refModele,
+      "constructeur": constructeur,
+      "typeMesure": typeMesure,
+      "uniteMesure": uniteMesure,
+      "reseau": reseau,
+      "positionGps": positionGps
+    }
+
+    axios.post('http://localhost:5000/express_backend',data)
+    .then(response => console.log(response))
+    .catch(err => console.log(err))
+  }
+
   render() {
     return (
       <section id="home">
@@ -15,7 +67,7 @@ class AjoutCapteur extends Component {
                   </Card.Title>
                 </Card.Header>
                 <Card.Body>
-                  <Form>
+                  <Form onSubmit={this.onFormSubmit.bind(this)}>
                     <Form.Group controlId="nomCapteur">
                       <Form.Label>Nom du capteur</Form.Label>
                       <Form.Control type="text" placeholder="Mon capteur 1" />
