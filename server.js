@@ -1,11 +1,16 @@
+// Dependencies
 const express = require('express')
 const app = express()
 const bodyParser  = require('body-parser')
 const port = process.env.PORT || 5000
 const fs = require('fs')
+const mongoose = require('mongoose')
 const capteurs = require('./capteurs.json')
 
-// console.log that your server is up and running
+// Models
+const Capteurs = require('./models/capteurs')
+
+// Server
 app.listen(port, () => console.log(`Listening on port ${port}`))
 
 app.use(function(req, res, next) {
@@ -16,23 +21,46 @@ app.use(function(req, res, next) {
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-// create a GET route
-app.get('/express_backend', (req, res) => {
-  res.send(capteurs)
+// API
+mongoose.Promise = global.Promise
+
+const url = 'mongodb+srv://fcordon:CaptainElan2696@ariatis-qdoq8.mongodb.net/iot?retryWrites=true'
+
+async function main() {
+  const client = mongoose.connect(url, { useNewUrlParser: true })
+
+  try {
+    await client
+    console.log('Connection established to MongoDB !')
+  } catch (err) {
+    console.dir(err)
+  }
+}
+
+main().catch(console.dir)
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname + 'client/build/index.html'))
 })
 
-// create a POST route
-app.post('/express_backend', (req, res, data) => {
-  let addCapteur = JSON.stringify(req.body)
+//---->>>> GET ALL CAPTEURS <<<<----
+app.get('/capteurs', (req, res) => {
+  Capteurs.find({}, function(err, capteur) {
+    if(err) {
+      throw err
+    }
+    res.json(capteur)
+  })
+})
 
-  fs.readFile('./capteurs.json', 'utf8', (err, data) => {
-    // let obj = [JSON.parse(data)]
-    data.push(addCapteur)
-    // json = JSON.stringify(data)
+//---->>>> POST CAPTEUR <<<<----
+app.post('/capteurs', (req, res) => {
+  let addCapteur = req.body
 
-    fs.writeFile('./capteurs.json', data, 'utf8', (err) => {
-      if (err) throw err;
-      console.log('The file has been saved !')
-    })
+  Capteurs.create(addCapteur, function(err, capteur) {
+    if(err) {
+      throw err
+    }
+    res.json(capteur)
   })
 })

@@ -2,11 +2,13 @@ import React, { Component }  from 'react'
 import { Navbar, Nav } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 
+import ariatisLogo from './img/ariatis_logo_full.png'
+
 export default class Navbars extends Component {
   render() {
     return (
       <Navbar bg="light" expand="lg">
-        <Navbar.Brand>NHL vote app</Navbar.Brand>
+        <Navbar.Brand><img src={ariatisLogo} alt='Logo Ariatis' /></Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
@@ -18,8 +20,8 @@ export default class Navbars extends Component {
             </LinkContainer>
           </Nav>
           <Nav>
-            <LinkContainer to={"/monCompte"}>
-              <Nav.Link eventKey={2}>Mon Compte</Nav.Link>
+            <LinkContainer to={"/gestionensembles"}>
+              <Nav.Link eventKey={2}>Gérer mes ensembles</Nav.Link>
             </LinkContainer>
           </Nav>
         </Navbar.Collapse>

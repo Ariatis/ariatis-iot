@@ -7,25 +7,9 @@ class AjoutCapteur extends Component {
     super(props)
 
     this.state = {
-      data: null
+      addBdd: false,
+      errorBdd: false
     }
-  }
-
-  componentDidMount() {
-      // Call our fetch function below once the component mounts
-    this.callBackendAPI()
-      .then(res => this.setState({ data: res.express }))
-      .catch(err => console.log(err));
-  }
-    // Fetches our GET route from the Express server. (Note the route we are fetching matches the GET route from server.js
-  callBackendAPI = async () => {
-    const response = await fetch('/express_backend');
-    const body = await response.json();
-
-    if (response.status !== 200) {
-      throw Error(body.message)
-    }
-    return body
   }
 
   onFormSubmit(e) {
@@ -37,26 +21,31 @@ class AjoutCapteur extends Component {
     let typeMesure = document.getElementById('typeMesure').value
     let uniteMesure = document.getElementById('uniteMesure').value
     let reseau = document.getElementById('reseau').value
-    let positionGps = document.getElementById('positionGps').value
+    let latitude = document.getElementById('latitude').value
+    let longitude = document.getElementById('longitude').value
 
     let data = {
-      "nomCapteur": nomCapteur,
+      "nom": nomCapteur,
       "refModele": refModele,
       "constructeur": constructeur,
       "typeMesure": typeMesure,
       "uniteMesure": uniteMesure,
       "reseau": reseau,
-      "positionGps": positionGps
+      "latitude": latitude,
+      "longitude": longitude
     }
 
-    axios.post('http://localhost:5000/express_backend',data)
-    .then(response => console.log(response))
+    axios.post('/capteurs', data)
+    .then(response => {
+      response.status === 200 ? this.setState({addBdd: true, errorBdd: false}) : this.setState({addBdd: false, errorBdd: true})
+    })
+    .then(this.setState({addBdd: false, errorBdd: false}))
     .catch(err => console.log(err))
   }
 
   render() {
     return (
-      <section id="home">
+      <section id="ajout-capteur">
         <Container>
           <Row>
             <Col xs={12} md={{ span:6, offset:3 }}>
@@ -112,11 +101,19 @@ class AjoutCapteur extends Component {
                       <Form.Control type="text" placeholder="Sigfox, ..." />
                     </Form.Group>
 
-                    <Form.Group controlId="positionGps">
-                      <Form.Label>Position GPS</Form.Label>
-                      <Form.Control type="text" placeholder="x:2.294481 y:48.858370" />
+                    <Form.Group controlId="latitude">
+                      <Form.Label>Latitude</Form.Label>
+                      <Form.Control type="text" placeholder="2.294481" />
                     </Form.Group>
 
+                    <Form.Group controlId="longitude">
+                      <Form.Label>Longitude</Form.Label>
+                      <Form.Control type="text" placeholder="48.858370" />
+                    </Form.Group>
+
+                    <Button type="reset">
+                      Annuler
+                    </Button>
                     <Button variant="primary" type="submit">
                       Enregistrer
                     </Button>
