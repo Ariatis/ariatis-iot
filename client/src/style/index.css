@@ -24,3 +24,12 @@ main {
 #gerer_ensembles img {
   width: 20%;
 }
+
+#gerer_ensembles .card {
+  margin-top: 30px;
+}
+
+#gerer_ensembles div[draggable='true'] {
+  cursor: -webkit-grab;
+  cursor: grab;
+}
