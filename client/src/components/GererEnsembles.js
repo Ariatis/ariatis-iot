@@ -62,7 +62,7 @@ class GererEnsembles extends Component {
     e.preventDefault()
   }
 
-  onDrop = (e, groupName) => {
+  onDropAdd = (e, groupName) => {
     let capteurID = e.dataTransfer.getData("id")
     let capteurNom =  e.dataTransfer.getData("nom")
 
@@ -75,6 +75,38 @@ class GererEnsembles extends Component {
           newCapteur.push({capteurID: capteurID, capteurNom: capteurNom})
           group.capteurs = newCapteur
         }
+      }
+      return groups
+    })
+
+    this.setState({
+      ...this.state
+    })
+  }
+
+  onDragStartRemove = (e, id, nom, groupNom) => {
+    e.dataTransfer.setData('id', id)
+    e.dataTransfer.setData('nom', nom)
+    e.dataTransfer.setData('groupNom', groupNom)
+  }
+
+  onDropRemove = (e) => {
+    let capteurID = e.dataTransfer.getData("id")
+    let groupNom =  e.dataTransfer.getData("groupNom")
+
+    console.log(capteurID, groupNom)
+
+    let groups = this.state.group.filter(group => {
+      if(group.nom === groupNom) {
+        let removeCapteur = [...group.capteurs]
+
+        removeCapteur.map((capteur, i) => {
+          if(capteur.capteurID === capteurID) {
+            removeCapteur.splice(i, 1)
+            group.capteurs = removeCapteur
+          }
+          return groups
+        })
       }
       return groups
     })
@@ -106,7 +138,7 @@ class GererEnsembles extends Component {
                     Mes capteurs
                   </Card.Title>
                 </Card.Header>
-                <Card.Body>
+                <Card.Body onDragOver={(e)=>this.onDragOver(e)} onDrop={(e)=>this.onDropRemove(e)}>
                     {
                       this.state.data !== null && this.state.data.map(capteur => {
                         return(
@@ -130,11 +162,11 @@ class GererEnsembles extends Component {
                           {group.nom}
                         </Card.Title>
                       </Card.Header>
-                      <Card.Body onDragOver={(e)=>this.onDragOver(e)} onDrop={(e)=>this.onDrop(e, group.nom)}>
+                      <Card.Body onDragOver={(e)=>this.onDragOver(e)} onDrop={(e)=>this.onDropAdd(e, group.nom)}>
                         {
                           group.capteurs !== undefined && group.capteurs.map((capteur, i) => {
                             return(
-                              <Col xs={12} md={6} key={i}>
+                              <Col xs={12} md={6} key={i} draggable id={capteur.capteurID} onDragStart={(e) => this.onDragStartRemove(e, capteur.capteurID, capteur.capteurNom, group.nom)} onMouseDown={this.dragging.bind(this, capteur.capteurID)} onMouseUp={this.draggable.bind(this, capteur.capteurID)}>
                                 <img src={capteurImg} alt={capteur.capteurNom} />
                                 {capteur.capteurNom}
                               </Col>
