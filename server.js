@@ -9,6 +9,7 @@ const capteurs = require('./capteurs.json')
 
 // Models
 const Capteurs = require('./models/capteurs')
+const Ensembles = require('./models/ensembles')
 
 // Server
 app.listen(port, () => console.log(`Listening on port ${port}`))
@@ -62,5 +63,57 @@ app.post('/capteurs', (req, res) => {
       throw err
     }
     res.json(capteur)
+  })
+})
+
+//---->>>> GET ALL ENSEMBLES <<<<----
+app.get('/ensembles', (req, res) => {
+  Ensembles.find({}, function(err, ensemble) {
+    if(err) {
+      throw err
+    }
+    res.json(ensemble)
+  })
+})
+
+//---->>>> POST ENSEMBLES <<<<----
+app.post('/ensembles', (req, res) => {
+  let addCapteur = req.body
+
+  Ensembles.create(addCapteur, function(err, ensemble) {
+    if(err) {
+      throw err
+    }
+    res.json(ensemble)
+  })
+})
+
+//---->>>> UPDATE ENSEMBLES <<<<----
+app.put('/ensembles/:nom', function(req, res) {
+  let newData = req.body
+
+  let update = {
+    '$set': {
+      capteurs: newData
+    }
+  };
+
+  let options = {new: false};
+
+  Ensembles.updateOne({nom: req.params.nom}, update, options, function(err, data) {
+    if(err) {
+      throw err;
+    }
+    res.json(data);
+  })
+})
+
+//---->>>> DELETE ENSEMBLES <<<<----
+app.delete('/ensembles/:nom', function(req, res) {
+  Ensembles.deleteOne({nom: req.params.nom}, function(err, data) {
+    if(err) {
+      throw err;
+    }
+    res.json(data);
   })
 })

@@ -12,16 +12,17 @@ export default class Navbars extends Component {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
-          <LinkContainer to={"/mescapteurs"}>
-            <Nav.Link eventKey={0}>Mes capteurs</Nav.Link>
-          </LinkContainer>
+            <LinkContainer to={"/mescapteurs"}>
+              <Nav.Link eventKey={0}>Mes capteurs</Nav.Link>
+            </LinkContainer>
             <LinkContainer to={"/mesensembles"}>
               <Nav.Link eventKey={1}>Mes ensembles</Nav.Link>
             </LinkContainer>
-          </Nav>
-          <Nav>
+            <LinkContainer to={"/ajoutcapteurs"}>
+              <Nav.Link eventKey={2}>Ajouter des capteurs</Nav.Link>
+            </LinkContainer>
             <LinkContainer to={"/gestionensembles"}>
-              <Nav.Link eventKey={2}>Gérer mes ensembles</Nav.Link>
+              <Nav.Link eventKey={3}>Gérer mes ensembles</Nav.Link>
             </LinkContainer>
           </Nav>
         </Navbar.Collapse>

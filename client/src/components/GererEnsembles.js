@@ -9,39 +9,46 @@ class GererEnsembles extends Component {
     super(props)
 
     this.state = {
-      data: null,
+      capteurs: null,
       group: [],
-      index: 2
+      addEnsembleErr: false
     }
   }
 
   componentDidMount() {
     this.callCapteurs()
-      .then(res => this.setState({ data: res }))
+      .then(res => this.setState({ capteurs: res }))
+      .catch(err => console.log(err))
+
+    this.callEnsembles()
+      .then(res => this.setState({ group: res }))
       .catch(err => console.log(err))
   }
 
-  callCapteurs = async () => {
-    const response = await axios.get('/capteurs')
-    const body = await response.data
-
-    if (response.status !== 200) {
-      throw Error(body.message)
-    }
-    return body
+  nameEnsemble() {
+    this.setState({addEnsembleErr: false})
   }
 
+  // Dragging + State management
   addGroup(e) {
     e.preventDefault()
     let newArray = [...this.state.group]
     let nomEnsemble = document.getElementById('nomEnsemble').value
 
-    newArray.push({nom:nomEnsemble})
+    nomEnsemble !== '' ? newArray.push({nom:nomEnsemble}) : this.setState({addEnsembleErr: true})
 
     this.setState({
       group: newArray
     })
+
+    let data = {
+      "nom": nomEnsemble,
+      "capteurs": []
+    }
+
+    this.postGroup(data)
   }
+
 
   dragging(id) {
     let element = document.getElementById(id)
@@ -70,10 +77,12 @@ class GererEnsembles extends Component {
       if (group.nom === groupName) {
         if (group.capteurs === undefined) {
           group.capteurs = [{capteurID: capteurID, capteurNom: capteurNom}]
+          this.updateGroup(group.nom, group.capteurs)
         } else {
           let newCapteur = [...group.capteurs]
           newCapteur.push({capteurID: capteurID, capteurNom: capteurNom})
           group.capteurs = newCapteur
+          this.updateGroup(group.nom, group.capteurs)
         }
       }
       return groups
@@ -94,8 +103,6 @@ class GererEnsembles extends Component {
     let capteurID = e.dataTransfer.getData("id")
     let groupNom =  e.dataTransfer.getData("groupNom")
 
-    console.log(capteurID, groupNom)
-
     let groups = this.state.group.filter(group => {
       if(group.nom === groupNom) {
         let removeCapteur = [...group.capteurs]
@@ -104,6 +111,7 @@ class GererEnsembles extends Component {
           if(capteur.capteurID === capteurID) {
             removeCapteur.splice(i, 1)
             group.capteurs = removeCapteur
+            this.updateGroup(group.nom, group.capteurs)
           }
           return groups
         })
@@ -116,6 +124,61 @@ class GererEnsembles extends Component {
     })
   }
 
+  removeGroup(groupNom) {
+    let groups = [...this.state.group]
+
+    groups.map((group, i) => {
+      console.log(group.nom, groupNom)
+      if(group.nom === groupNom) {
+        groups.splice(i, 1)
+        group = groups
+      }
+      return groups
+    })
+
+    this.setState({
+      group: groups
+    })
+    console.log('groups : ', groups)
+    this.deleteGroup(groupNom)
+  }
+
+  // CRUD Operations
+  callCapteurs = async () => {
+    const response = await axios.get('/capteurs')
+    const body = await response.data
+
+    if (response.status !== 200) {
+      throw Error(body.message)
+    }
+    return body
+  }
+
+  callEnsembles = async () => {
+    const response = await axios.get('/ensembles')
+    const body = await response.data
+
+    if (response.status !== 200) {
+      throw Error(body.message)
+    }
+    return body
+  }
+
+  postGroup(data) {
+    axios.post('/ensembles', data)
+    .catch(err => console.log(err))
+  }
+
+  updateGroup(nom, data) {
+    axios.put('/ensembles/' + nom, data)
+    .catch(err => console.log(err))
+  }
+
+  deleteGroup(nom) {
+    axios.delete('/ensembles/' + nom)
+    .catch(err => console.log(err))
+  }
+
   render() {
     return (
       <section id="gerer_ensembles">
@@ -123,7 +186,8 @@ class GererEnsembles extends Component {
           <Form onSubmit={this.addGroup.bind(this)}>
             <Form.Row>
               <Col>
-                <Form.Control id="nomEnsemble" type="text" placeholder="Nom de l'ensemble" />
+                <Form.Control id="nomEnsemble" type="text" placeholder="Nom de l'ensemble" onChange={this.nameEnsemble.bind(this)} />
+                {this.state.addEnsembleErr && <Form.Text className="error">Vous devez entrer un nom pour votre ensemble</Form.Text>}
               </Col>
               <Col>
                 <Button type="submit">Ajouter un ensemble</Button>
@@ -140,7 +204,7 @@ class GererEnsembles extends Component {
                 </Card.Header>
                 <Card.Body onDragOver={(e)=>this.onDragOver(e)} onDrop={(e)=>this.onDropRemove(e)}>
                     {
-                      this.state.data !== null && this.state.data.map(capteur => {
+                      this.state.capteurs !== null && this.state.capteurs.map(capteur => {
                         return(
                           <Col xs={12} md={6} draggable key={capteur._id} id={capteur._id} onDragStart={(e) => this.onDragStart(e, capteur._id, capteur.nom)} onMouseDown={this.dragging.bind(this, capteur._id)} onMouseUp={this.draggable.bind(this, capteur._id)}>
                             <img src={capteurImg} alt={capteur.nom} />
@@ -174,6 +238,7 @@ class GererEnsembles extends Component {
                           })
                         }
                       </Card.Body>
+                      <Card.Footer className="text-muted" onClick={this.removeGroup.bind(this, group.nom)}>Supprimer l'ensemble</Card.Footer>
                     </Card>
                   )
                 })
