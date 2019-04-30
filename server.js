@@ -15,7 +15,6 @@ const Ensembles = require('./models/ensembles')
 // Server
 app.listen(port, () => console.log(`Listening on port ${port}`))
 
-app.use(favicon(path.join(__dirname, 'client/public', 'favicon.ico')))
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*")
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
