@@ -1,5 +1,6 @@
 // Dependencies
 const express = require('express')
+const path = require('path')
 const app = express()
 const bodyParser  = require('body-parser')
 const port = process.env.PORT || 5000
@@ -14,6 +15,7 @@ const Ensembles = require('./models/ensembles')
 // Server
 app.listen(port, () => console.log(`Listening on port ${port}`))
 
+app.use(favicon(path.join(__dirname, 'client/public', 'favicon.ico')))
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*")
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
@@ -21,6 +23,7 @@ app.use(function(req, res, next) {
 })
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(express.static(path.join(__dirname, 'client/build')))
 
 // API
 mongoose.Promise = global.Promise
