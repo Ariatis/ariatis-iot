@@ -14,12 +14,12 @@ class Capteur extends Component {
   }
 
   componentDidMount() {
-    this.callCapteurs()
+    this.callGroups()
       .then(res => this.setState({ data: res }))
       .catch(err => console.log(err))
   }
 
-  callCapteurs = async () => {
+  callGroups = async () => {
     const response = await axios.get('/ensembles')
     const body = await response.data
 

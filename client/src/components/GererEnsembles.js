@@ -30,26 +30,6 @@ class GererEnsembles extends Component {
   }
 
   // Dragging + State management
-  addGroup(e) {
-    e.preventDefault()
-    let newArray = [...this.state.group]
-    let nomEnsemble = document.getElementById('nomEnsemble').value
-
-    nomEnsemble !== '' ? newArray.push({nom:nomEnsemble}) : this.setState({addEnsembleErr: true})
-
-    this.setState({
-      group: newArray
-    })
-
-    let data = {
-      "nom": nomEnsemble,
-      "capteurs": []
-    }
-
-    this.postGroup(data)
-  }
-
-
   dragging(id) {
     let element = document.getElementById(id)
     element.style.cursor = 'grabbing'
@@ -124,25 +104,6 @@ class GererEnsembles extends Component {
     })
   }
 
-  removeGroup(groupNom) {
-    let groups = [...this.state.group]
-
-    groups.map((group, i) => {
-      console.log(group.nom, groupNom)
-      if(group.nom === groupNom) {
-        groups.splice(i, 1)
-        group = groups
-      }
-      return groups
-    })
-
-    this.setState({
-      group: groups
-    })
-    console.log('groups : ', groups)
-    this.deleteGroup(groupNom)
-  }
-
   // CRUD Operations
   callCapteurs = async () => {
     const response = await axios.get('/capteurs')
@@ -162,6 +123,42 @@ class GererEnsembles extends Component {
       throw Error(body.message)
     }
     return body
+  }
+
+  addGroup(e) {
+    e.preventDefault()
+    let newArray = [...this.state.group]
+    let nomEnsemble = document.getElementById('nomEnsemble').value
+
+    nomEnsemble !== '' ? newArray.push({nom:nomEnsemble}) : this.setState({addEnsembleErr: true})
+
+    this.setState({
+      group: newArray
+    })
+
+    let data = {
+      "nom": nomEnsemble,
+      "capteurs": []
+    }
+
+    nomEnsemble !== '' && this.postGroup(data)
+  }
+
+  removeGroup(groupNom) {
+    let groups = [...this.state.group]
+
+    groups.map((group, i) => {
+      if(group.nom === groupNom) {
+        groups.splice(i, 1)
+        group = groups
+      }
+      return groups
+    })
+
+    this.setState({
+      group: groups
+    })
+    this.deleteGroup(groupNom)
   }
 
   postGroup(data) {
