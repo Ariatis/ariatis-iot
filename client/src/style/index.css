@@ -13,6 +13,16 @@ main {
   padding-top: 20px;
 }
 
+button.btn {
+  margin-right: 20px;
+}
+
+.svg-inline--fa {
+  font-size: 1.3rem;
+  margin-right: 1rem;
+  cursor: pointer;
+}
+
 /* Navbar */
 .navbar-brand {
   max-width: 150px;
@@ -22,26 +32,37 @@ main {
   width: 100%;
 }
 
-/* Page ajout des capteurs */
-#ajout-capteur .btn {
-  margin-right: 20px;
+/* PAGE CREATION CLIENT, PARCS, CAPTEURS */
+#creation .card {
+  margin-bottom: 1.5rem;
 }
 
-/* Page de gestion des ensembles */
-#gerer_ensembles img, #ensembles img {
-  width: 30px;
+#ajout-parc, #ajout-capteur {
+  display: none;
 }
 
-#gerer_ensembles .card {
-  margin-top: 30px;
+.client-title {
+  text-decoration: underline;
+  color: #000;
 }
 
-#gerer_ensembles div[draggable='true'] {
-  cursor: -webkit-grab;
-  cursor: grab;
+.client-name {
+  font-size: 1.3rem;
 }
 
-#gerer_ensembles .text-muted {
-    font-size: 12px;
-    cursor: pointer;
+.client-desc {
+  font-size: 0.7rem;
+}
+
+#recap {
+  margin-bottom: 20px;
+}
+
+.recap-section {
+  margin-bottom: 20px;
+}
+
+/* PAGE GESTION DES CAPTEURS */
+#gerer-capteur .container {
+  max-width: 90% !important;
 }

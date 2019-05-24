@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 
 const userSchema = mongoose.Schema({
+    clientID: {type: String},
+    parcID: {type: String},
     nom: {type: String},
     refModele: {type: String},
     constructeur: {type: String},
