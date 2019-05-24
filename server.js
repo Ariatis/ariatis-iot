@@ -10,6 +10,8 @@ const capteurs = require('./capteurs.json')
 // Models
 const Capteurs = require('./models/capteurs')
 const Ensembles = require('./models/ensembles')
+const Clients = require('./models/clients')
+const Parcs = require('./models/parcs')
 
 // Server
 app.listen(port, () => console.log(`Listening on port ${port}`))
@@ -44,9 +46,156 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname + 'client/build/index.html'))
 })
 
+//---->>>> GET ALL CLIENTS <<<<----
+app.get('/clients', (req, res) => {
+  Clients.find({}, function(err, client) {
+    if(err) {
+      throw err
+    }
+    res.json(client)
+  })
+})
+
+//---->>>> GET ONE CLIENT <<<<----
+app.get('/clients/:id', (req, res) => {
+  Clients.find({_id: req.params.id}, function(err, client) {
+    if(err) {
+      throw err
+    }
+    res.json(client)
+  })
+})
+
+//---->>>> POST CLIENTS <<<<----
+app.post('/clients', (req, res) => {
+  let addClient = req.body
+
+  Clients.create(addClient, function(err, client) {
+    if(err) {
+      throw err
+    }
+    res.json(client)
+  })
+})
+
+//---->>>> UPDATE CLIENTS <<<<----
+app.put('/clients/:id', function(req, res) {
+  let newData = req.body
+
+  let update = {
+    '$set': {
+      nom: newData.nom,
+      description: newData.description
+    }
+  };
+
+  let options = {new: false};
+
+  Clients.updateOne({_id: req.params.id}, update, options, function(err, data) {
+    if(err) {
+      throw err;
+    }
+    res.json(data);
+  })
+})
+
+//---->>>> DELETE CLIENTS <<<<----
+app.delete('/clients/:id', function(req, res) {
+  Clients.deleteOne({_id: req.params.id}, function(err, data) {
+    if(err) {
+      throw err;
+    }
+    res.json(data);
+  })
+})
+
+//---->>>> GET ALL PARCS <<<<----
+app.get('/parcs/', (req, res) => {
+  let parcsID = req.query.id
+
+  if(parcsID !== undefined) {
+    Parcs.find({clientID:parcsID}, function(err, parc) {
+      if(err) {
+        throw err
+      }
+      res.json(parc.length)
+    })
+  } else {
+    Parcs.find({}, function(err, parc) {
+      if(err) {
+        throw err
+      }
+      res.json(parc)
+    })
+  }
+})
+
+//---->>>> GET ONE PARC <<<<----
+app.get('/parcs/:id', (req, res) => {
+  Parcs.find({_id: req.params.id}, function(err, client) {
+    if(err) {
+      throw err
+    }
+    res.json(client)
+  })
+})
+
+//---->>>> POST PARCS <<<<----
+app.post('/parcs', (req, res) => {
+  let addParcs = req.body
+
+  Parcs.create(addParcs, function(err, parc) {
+    if(err) {
+      throw err
+    }
+    res.json(parc)
+  })
+})
+
+//---->>>> UPDATE PARCS <<<<----
+app.put('/parcs/:id', function(req, res) {
+  let newData = req.body
+
+  let update = {
+    '$set': {
+      nom: newData.nom,
+      description: newData.description
+    }
+  };
+
+  let options = {new: false};
+
+  Parcs.updateOne({_id: req.params.id}, update, options, function(err, data) {
+    if(err) {
+      throw err;
+    }
+    res.json(data);
+  })
+})
+
+//---->>>> DELETE PARCS <<<<----
+app.delete('/parcs/:id', function(req, res) {
+  Parcs.deleteOne({_id: req.params.id}, function(err, data) {
+    if(err) {
+      throw err;
+    }
+    res.json(data);
+  })
+})
+
 //---->>>> GET ALL CAPTEURS <<<<----
 app.get('/capteurs', (req, res) => {
   Capteurs.find({}, function(err, capteur) {
+    if(err) {
+      throw err
+    }
+    res.json(capteur)
+  })
+})
+
+//---->>>> GET ONE CAPTEUR <<<<----
+app.get('/capteurs/:id', (req, res) => {
+  Capteurs.find({_id: req.params.id}, function(err, capteur) {
     if(err) {
       throw err
     }

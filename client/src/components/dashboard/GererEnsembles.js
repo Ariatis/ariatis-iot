@@ -187,7 +187,7 @@ class GererEnsembles extends Component {
                 {this.state.addEnsembleErr && <Form.Text className="error">Vous devez entrer un nom pour votre ensemble</Form.Text>}
               </Col>
               <Col>
-                <Button type="submit">Ajouter un ensemble</Button>
+                <Button type="submit">Ajouter un parc</Button>
               </Col>
             </Form.Row>
           </Form>

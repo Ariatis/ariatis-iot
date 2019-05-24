@@ -1,19 +1,20 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 
-import AjoutCapteur from "./components/AjoutCapteur"
-import Capteur from "./components/Capteur"
-import Ensemble from "./components/Ensemble"
-import GererEnsembles from "./components/GererEnsembles"
+import Home from './containers/Home'
+import Creation from './containers/Creation'
+import GererClient from './components/backoffice/GererClient'
+import GererParc from './components/backoffice/GererParc'
+import GererCapteur from './components/backoffice/GererCapteur'
 
 const Main = () => (
   <main>
     <Switch>
-      <Route exact path='/' component={AjoutCapteur} />
-      <Route path='/mescapteurs' component={Capteur} />
-      <Route path='/mesensembles' component={Ensemble} />
-      <Route path='/gestionensembles' component={GererEnsembles} />
-      <Route path='/ajoutcapteurs' component={AjoutCapteur} />
+      <Route exact path='/' component={Home} />
+      <Route path='/creationclient' component={Creation} />
+      <Route path='/gererclient' component={GererClient} />
+      <Route path='/gererparc' component={GererParc} />
+      <Route path='/gerercapteur' component={GererCapteur} />
     </Switch>
   </main>
 )
