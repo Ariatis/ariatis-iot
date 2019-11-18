@@ -13,9 +13,15 @@ export default class Navbars extends Component {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
             <NavDropdown title="Gérer les clients" id="basic-nav-dropdown">
-              <NavDropdown.Item href={"/gererclient"}>Les clients</NavDropdown.Item>
-              <NavDropdown.Item href={"/gererparc"}>Les parcs</NavDropdown.Item>
-              <NavDropdown.Item href={"/gerercapteur"}>Les capteurs</NavDropdown.Item>
+              <LinkContainer to={"/gererclient"}>
+                <Nav.Link eventKey={0}>Les clients</Nav.Link>
+              </LinkContainer>
+              <LinkContainer to={"/gererparc"}>
+                <Nav.Link eventKey={0}>Les parcs</Nav.Link>
+              </LinkContainer>
+              <LinkContainer to={"/gerercapteur"}>
+                <Nav.Link eventKey={0}>Les capteurs</Nav.Link>
+              </LinkContainer>
             </NavDropdown>
             <LinkContainer to={"/creationclient"}>
               <Nav.Link eventKey={3}>Créer un client</Nav.Link>
