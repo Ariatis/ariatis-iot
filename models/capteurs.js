@@ -11,7 +11,7 @@ const userSchema = mongoose.Schema({
     reseau: {type: String},
     latitude: {type: Number},
     longitude: {type: Number}
-});
+}, { collection : 'capteurs' });
 
 const Capteurs = mongoose.model('capteurs', userSchema);
 module.exports = Capteurs;
