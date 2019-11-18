@@ -44,10 +44,6 @@ async function main() {
 
 main().catch(console.dir)
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname + 'client/build/index.html'))
-})
-
 //---->>>> GET ALL CLIENTS <<<<----
 app.get('/clients', (req, res) => {
   Clients.find({}, function(err, client) {
@@ -267,4 +263,8 @@ app.delete('/ensembles/:nom', function(req, res) {
     }
     res.json(data);
   })
+})
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname + 'client/build/index.html'))
 })
