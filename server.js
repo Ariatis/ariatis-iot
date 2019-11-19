@@ -32,7 +32,7 @@ mongoose.Promise = global.Promise
 const url = 'mongodb+srv://fcordon:CaptainElan2696@ariatis-qdoq8.mongodb.net/iot?retryWrites=true'
 
 async function main() {
-  const client = mongoose.connect(url, { useNewUrlParser: true })
+  const client = mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
 
   try {
     await client
