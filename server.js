@@ -6,7 +6,6 @@ const bodyParser  = require('body-parser')
 const port = process.env.PORT || 5000
 const fs = require('fs')
 const mongoose = require('mongoose')
-const capteurs = require('./capteurs.json')
 
 // Models
 const Capteurs = require('./models/capteurs')
@@ -265,6 +264,8 @@ app.delete('/ensembles/:nom', function(req, res) {
   })
 })
 
+//---->>>> FIN API <<<<----
+
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname + 'client/build/index.html'))
+  res.sendFile(path.join(__dirname, 'client/build', 'index.html'))
 })
