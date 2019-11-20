@@ -14,6 +14,7 @@ class GererParc extends Component {
       parcs: [],
       updateParc: [],
       deleteParc: '',
+      parcNom: '',
       capteurs: [],
       update: false,
       show: false
@@ -42,8 +43,8 @@ class GererParc extends Component {
     this.setState({ show: false });
   }
 
-  handleShow(clientID) {
-    this.setState({ show: true, deleteClient: clientID });
+  handleShow(parcID, parcNom) {
+    this.setState({ show: true, deleteParc: parcID, parcNom: parcNom });
   }
 
   // CRUD Operations
@@ -62,11 +63,26 @@ class GererParc extends Component {
   getParcs = async () => {
     const response = await axios.get('/parcs')
     const body = await response.data
+    const data = [...body]
+
+    data.sort((a,b) => {
+      let comparaison = 0
+      let nomA = a.nom
+      let nomB = b.nom
+
+      if(nomA.toLowerCase() > nomB.toLowerCase()) {
+        comparaison = 1
+      } else {
+        comparaison = -1
+      }
+
+      return comparaison
+    })
 
     if (response.status !== 200) {
       throw Error(body.message)
     }
-    return body
+    return data
   }
 
   updateParc = async (parcID) => {
@@ -82,8 +98,8 @@ class GererParc extends Component {
     const response = await deleteParc.data
 
     if(response.ok === 1) {
-      const getClients = await axios.get('/parcs')
-      const response = getClients.data
+      const getParcs = await axios.get('/parcs')
+      const response = getParcs.data
 
       this.setState({ parcs: response, show: false })
 
@@ -123,7 +139,7 @@ class GererParc extends Component {
           <td>{capteurs}</td>
           <td>
           <FontAwesomeIcon icon="pencil-alt" onClick={this.updateParc.bind(this, parc._id)} />
-          <FontAwesomeIcon icon="times" onClick={this.handleShow.bind(this, parc._id)} />
+          <FontAwesomeIcon icon="times" onClick={this.handleShow.bind(this, parc._id, parc.nom)} />
           </td>
         </tr>
       )
@@ -154,19 +170,17 @@ class GererParc extends Component {
             </Col>
             <Modal show={this.state.show} onHide={this.handleClose.bind(this)}>
               <Modal.Header closeButton>
-                <Modal.Title>Suppression de votre parc</Modal.Title>
+                <Modal.Title>Suppression de votre parc: {this.state.parcNom}</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                Etes vous sur de vouloir supprimer ce parc ?
-              </Modal.Body>
-              <Modal.Footer>
+                <p>Etes vous certain de vouloir supprimer {this.state.parcNom} ?</p>
                 <Button variant="secondary" onClick={this.handleClose.bind(this)}>
-                  Fermer
+                  Annuler
                 </Button>
                 <Button variant="danger" onClick={this.deleteParc.bind(this)}>
                   Supprimer
                 </Button>
-              </Modal.Footer>
+              </Modal.Body>
             </Modal>
           </Row>
         </Container>

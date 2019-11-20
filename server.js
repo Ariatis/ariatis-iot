@@ -212,6 +212,16 @@ app.post('/capteurs', (req, res) => {
   })
 })
 
+//---->>>> DELETE CAPTEUR <<<<----
+app.delete('/capteurs/:id', function(req, res) {
+  Capteurs.deleteOne({_id: req.params.id}, function(err, data) {
+    if(err) {
+      throw err;
+    }
+    res.json(data);
+  })
+})
+
 //---->>>> GET ALL ENSEMBLES <<<<----
 app.get('/ensembles', (req, res) => {
   Ensembles.find({}, function(err, ensemble) {

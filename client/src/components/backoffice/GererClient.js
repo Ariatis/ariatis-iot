@@ -13,6 +13,7 @@ class GererClient extends Component {
       clients: [],
       updateClient: [],
       deleteClient: '',
+      clientNom: '',
       parcs: [],
       capteurs: [],
       update: false,
@@ -42,8 +43,8 @@ class GererClient extends Component {
     this.setState({ show: false });
   }
 
-  handleShow(clientID) {
-    this.setState({ show: true, deleteClient: clientID });
+  handleShow(clientID, clientNom) {
+    this.setState({ show: true, deleteClient: clientID, clientNom: clientNom });
   }
 
   // CRUD Operations
@@ -51,11 +52,27 @@ class GererClient extends Component {
   getClients = async () => {
     const response = await axios.get('/clients')
     const body = await response.data
+    const data = [...body]
+
+    data.sort((a,b) => {
+      let comparaison = 0
+      let nomA = a.nom
+      let nomB = b.nom
+
+      if(nomA.toLowerCase() > nomB.toLowerCase()) {
+        comparaison = 1
+      } else {
+        comparaison = -1
+      }
+
+      return comparaison
+    })
 
     if (response.status !== 200) {
       throw Error(body.message)
     }
-    return body
+
+    return data
   }
 
   updateClient = async (clientID) => {
@@ -82,7 +99,7 @@ class GererClient extends Component {
     return response
   }
 
-  // --------->> Gestion des Parcs <<---------
+  // --------->> Appel BDD des Parcs <<---------
   getParcs = async () => {
     const response = await axios.get('/parcs')
     const body = await response.data
@@ -93,7 +110,7 @@ class GererClient extends Component {
     return body
   }
 
-  // --------->> Gestion des Capteurs <<---------
+  // --------->> Appel BDD des Capteurs <<---------
   getCapteurs = async () => {
     const response = await axios.get('/capteurs')
     const body = await response.data
@@ -121,6 +138,7 @@ class GererClient extends Component {
         }
         return capteurs
       })
+
       return (
         <tr key={client._id} id={client._id}>
           <td>{client.nom}</td>
@@ -129,7 +147,7 @@ class GererClient extends Component {
           <td>{capteurs}</td>
           <td>
             <FontAwesomeIcon icon="pencil-alt" onClick={this.updateClient.bind(this, client._id)} />
-            <FontAwesomeIcon icon="times" onClick={this.handleShow.bind(this, client._id)} />
+            <FontAwesomeIcon icon="times" onClick={this.handleShow.bind(this, client._id, client.nom)} />
           </td>
         </tr>
       )
@@ -160,19 +178,17 @@ class GererClient extends Component {
             </Col>
             <Modal show={this.state.show} onHide={this.handleClose.bind(this)}>
               <Modal.Header closeButton>
-                <Modal.Title>Suppression de votre client</Modal.Title>
+                <Modal.Title>Suppression de votre client {this.state.clientNom}</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                Etes vous sur de vouloir supprimer ce client ?
-              </Modal.Body>
-              <Modal.Footer>
+                <p>Etes-vous certain de vouloir supprimer  {this.state.clientNom} ?</p>
                 <Button variant="secondary" onClick={this.handleClose.bind(this)}>
-                  Fermer
+                  Annuler
                 </Button>
                 <Button variant="danger" onClick={this.deleteClient.bind(this)}>
                   Supprimer
                 </Button>
-              </Modal.Footer>
+              </Modal.Body>
             </Modal>
           </Row>
         </Container>
