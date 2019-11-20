@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Row, Col, Table } from 'react-bootstrap'
+import { Container, Row, Col, Table, Modal, Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from 'axios'
 
@@ -15,6 +15,9 @@ class GererCapteur extends Component {
       capteurs: [],
       updateCapteur: [],
       deleteCapteur: '',
+      capteurNom: '',
+      clientNom: '',
+      parcNom: '',
       update: false,
       show: false
     }
@@ -42,8 +45,8 @@ class GererCapteur extends Component {
     this.setState({ show: false });
   }
 
-  handleShow(clientID) {
-    this.setState({ show: true, deleteClient: clientID });
+  handleShow(capteurID, capteurNom, clientNom, parcNom) {
+    this.setState({ show: true, deleteCapteur: capteurID, capteurNom: capteurNom, clientNom: clientNom, parcNom: parcNom });
   }
 
   // CRUD Operations
@@ -110,10 +113,12 @@ class GererCapteur extends Component {
         if(client._id === capteur.clientID) return client.nom
         return true
       })
+
       const parcName = this.state.parcs.map(parc => {
         if(parc._id === capteur.parcID) return parc.nom
         return true
       })
+
       return (
         <tr key={capteur._id} id={capteur._id}>
           <td>{capteur.nom}</td>
@@ -127,7 +132,7 @@ class GererCapteur extends Component {
           <td>{parcName}</td>
           <td>
             <FontAwesomeIcon icon="pencil-alt" onClick={this.updateCapteur.bind(this, capteur._id)} />
-            <FontAwesomeIcon icon="times" onClick={this.handleShow.bind(this, capteur._id)} />
+            <FontAwesomeIcon icon="times" onClick={this.handleShow.bind(this, capteur._id, capteur.nom, clientName, parcName)} />
           </td>
         </tr>
       )
@@ -161,6 +166,22 @@ class GererCapteur extends Component {
                 </Table>
               }
             </Col>
+            <Modal show={this.state.show} onHide={this.handleClose.bind(this)}>
+              <Modal.Header closeButton>
+                <Modal.Title>Suppression du capteur: {this.state.capteurNom}</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <p>Etes vous certain de vouloir supprimer {this.state.capteurNom} ?</p>
+                <p>Client : {this.state.clientNom}</p>
+                <p>Parcs : {this.state.parcNom}</p>
+                <Button variant="secondary" onClick={this.handleClose.bind(this)}>
+                  Annuler
+                </Button>
+                <Button variant="danger" onClick={this.deleteCapteur.bind(this)}>
+                  Supprimer
+                </Button>
+              </Modal.Body>
+            </Modal>
           </Row>
         </Container>
       </section>

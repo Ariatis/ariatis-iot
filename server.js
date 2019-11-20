@@ -1,5 +1,6 @@
 // Dependencies
 const express = require('express')
+const path = require('path')
 const app = express()
 const bodyParser  = require('body-parser')
 const port = process.env.PORT || 5000
@@ -22,6 +23,7 @@ app.use(function(req, res, next) {
 })
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(express.static(path.join(__dirname, 'client/build')))
 
 // API
 mongoose.Promise = global.Promise
@@ -207,6 +209,16 @@ app.post('/capteurs', (req, res) => {
       throw err
     }
     res.json(capteur)
+  })
+})
+
+//---->>>> DELETE CAPTEUR <<<<----
+app.delete('/capteurs/:id', function(req, res) {
+  Capteurs.deleteOne({_id: req.params.id}, function(err, data) {
+    if(err) {
+      throw err;
+    }
+    res.json(data);
   })
 })
 

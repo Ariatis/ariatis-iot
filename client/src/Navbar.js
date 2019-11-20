@@ -12,15 +12,15 @@ export default class Navbars extends Component {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
-            <NavDropdown title="Gérer les clients" id="basic-nav-dropdown">
+            <NavDropdown title="Gestion..." id="basic-nav-dropdown">
               <LinkContainer to={"/gererclient"}>
-                <Nav.Link eventKey={0}>Les clients</Nav.Link>
+                <Nav.Link eventKey={0}>des clients</Nav.Link>
               </LinkContainer>
               <LinkContainer to={"/gererparc"}>
-                <Nav.Link eventKey={0}>Les parcs</Nav.Link>
+                <Nav.Link eventKey={1}>des parcs</Nav.Link>
               </LinkContainer>
               <LinkContainer to={"/gerercapteur"}>
-                <Nav.Link eventKey={0}>Les capteurs</Nav.Link>
+                <Nav.Link eventKey={2}>des capteurs</Nav.Link>
               </LinkContainer>
             </NavDropdown>
             <LinkContainer to={"/creationclient"}>
