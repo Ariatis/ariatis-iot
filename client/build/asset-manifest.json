@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/static/css/main.de8f7c5e.chunk.css",
-    "main.js": "/static/js/main.925e2913.chunk.js",
-    "main.js.map": "/static/js/main.925e2913.chunk.js.map",
+    "main.css": "/static/css/main.8a055dbf.chunk.css",
+    "main.js": "/static/js/main.91ed880c.chunk.js",
+    "main.js.map": "/static/js/main.91ed880c.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.03f39fd1.js",
     "runtime-main.js.map": "/static/js/runtime-main.03f39fd1.js.map",
-    "static/js/2.f44f1807.chunk.js": "/static/js/2.f44f1807.chunk.js",
-    "static/js/2.f44f1807.chunk.js.map": "/static/js/2.f44f1807.chunk.js.map",
+    "static/js/2.d1206d4b.chunk.js": "/static/js/2.d1206d4b.chunk.js",
+    "static/js/2.d1206d4b.chunk.js.map": "/static/js/2.d1206d4b.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.0acece7466332f09df69c4d5f8003556.js": "/precache-manifest.0acece7466332f09df69c4d5f8003556.js",
+    "precache-manifest.18a0f1a0e08e22fa1cbd05a0f86b1aa1.js": "/precache-manifest.18a0f1a0e08e22fa1cbd05a0f86b1aa1.js",
     "service-worker.js": "/service-worker.js",
-    "static/css/main.de8f7c5e.chunk.css.map": "/static/css/main.de8f7c5e.chunk.css.map",
+    "static/css/main.8a055dbf.chunk.css.map": "/static/css/main.8a055dbf.chunk.css.map",
     "static/media/ariatis_logo_full.png": "/static/media/ariatis_logo_full.3163df45.png"
   },
   "entrypoints": [
     "static/js/runtime-main.03f39fd1.js",
-    "static/js/2.f44f1807.chunk.js",
-    "static/css/main.de8f7c5e.chunk.css",
-    "static/js/main.925e2913.chunk.js"
+    "static/js/2.d1206d4b.chunk.js",
+    "static/css/main.8a055dbf.chunk.css",
+    "static/js/main.91ed880c.chunk.js"
   ]
 }
