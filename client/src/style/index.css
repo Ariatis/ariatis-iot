@@ -27,6 +27,7 @@ button.btn {
 /* Navbar */
 .navbar-brand {
   max-width: 150px;
+  cursor: pointer;
 }
 
 .navbar-brand img {
@@ -41,6 +42,38 @@ button.btn {
 .navbar-light .navbar-nav .show>.nav-link:hover {
   color: #3399F3 !important;
   transition: color 1s;
+}
+
+/* PAGE HOME */
+#home h2 {
+  text-align: center;
+  color: #5a7e9c;
+}
+
+#home .home-section-title {
+  margin: 20px 0;
+}
+
+#home .home-section-title h3 {
+  color: rgba(0, 0, 0, 0.6);
+  margin-top: 20px;
+}
+
+#home .home-section-title::after {
+  content: '';
+  display: block;
+  height: 2px;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+#home .card {
+  height: 100%;
+}
+
+#home .card-header {
+  text-transform: uppercase;
+  font-weight: 700;
 }
 
 /* PAGE CREATION CLIENT, PARCS, CAPTEURS */
