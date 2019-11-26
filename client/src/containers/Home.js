@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import { Container, Row, Col, Card, CardDeck } from 'react-bootstrap'
-import { LinkContainer } from 'react-router-bootstrap'
+import { Container, Row, Col, CardDeck } from 'react-bootstrap'
+
+import CardHome from '../components/backoffice/CardHome'
 
 class Home extends Component {
   render() {
@@ -18,43 +19,22 @@ class Home extends Component {
             </Col>
             <CardDeck>
               <Col xs={12} sm={6} md={4}>
-                <Card>
-                  <Card.Header>Créer un client</Card.Header>
-                  <Card.Body>
-                    <Card.Text>Cette interface vous permet de créer un client puis ensuite les parcs et capteurs.</Card.Text>
-                  </Card.Body>
-                  <Card.Footer>
-                    <LinkContainer to={"/creationclient"}>
-                      <Card.Link href="#"><small>Créer un client</small></Card.Link>
-                    </LinkContainer>
-                  </Card.Footer>
-                </Card>
+                <CardHome title={'Créer un client'}
+                text={'Cette interface vous permet de créer un client puis ensuite les parcs et capteurs.'}
+                url={'/creationclient'}
+                link={'Créer un client'} />
               </Col>
               <Col xs={12} sm={6} md={4}>
-                <Card>
-                  <Card.Header>Créer un parc</Card.Header>
-                  <Card.Body>
-                    <Card.Text>Cette interface vous permet de créer un parc en l'associant à un client puis ses capteurs.</Card.Text>
-                  </Card.Body>
-                  <Card.Footer>
-                    <LinkContainer to={"/"}>
-                      <Card.Link href="#"><small>Créer un parc (feature en cours)</small></Card.Link>
-                    </LinkContainer>
-                  </Card.Footer>
-                </Card>
+                <CardHome title={'Créer un parc'}
+                text={'Cette interface vous permet de créer un parc en l\'associant à un client puis ses capteurs.'}
+                url={'/'}
+                link={'Créer un parc (feature en cours)'} />
               </Col>
               <Col xs={12} sm={6} md={4}>
-                <Card>
-                  <Card.Header>Créer vos capteurs</Card.Header>
-                  <Card.Body>
-                    <Card.Text>Cette interface vous permet de créer vos capteurs en les associant à un client et un parc.</Card.Text>
-                  </Card.Body>
-                  <Card.Footer>
-                    <LinkContainer to={"/"}>
-                      <Card.Link href="#"><small>Créer les capteurs (feature en cours)</small></Card.Link>
-                    </LinkContainer>
-                  </Card.Footer>
-                </Card>
+                <CardHome title={'Créer vos capteurs'}
+                text={'Cette interface vous permet de créer vos capteurs en les associant à un client et un parc.'}
+                url={'/'}
+                link={'Créer les capteurs (feature en cours)'} />
               </Col>
             </CardDeck>
           </Row>
@@ -64,43 +44,22 @@ class Home extends Component {
             </Col>
             <CardDeck>
               <Col xs={12} sm={6} md={4}>
-                <Card>
-                  <Card.Header>Gérer vos clients</Card.Header>
-                  <Card.Body>
-                    <Card.Text>Cette interface vous permet de gérer vos clients ainsi que les parcs et capteurs qui leur sont associés.</Card.Text>
-                  </Card.Body>
-                  <Card.Footer>
-                    <LinkContainer to={"/gererclient"}>
-                      <Card.Link href="#"><small>Gestion des clients</small></Card.Link>
-                    </LinkContainer>
-                  </Card.Footer>
-                </Card>
+                <CardHome title={'Gérer vos clients'}
+                text={'Cette interface vous permet de gérer vos clients ainsi que les parcs et capteurs qui leur sont associés.'}
+                url={'/gererclient'}
+                link={'Gestion des clients'} />
               </Col>
               <Col xs={12} sm={6} md={4}>
-                <Card>
-                  <Card.Header>Gérer vos parcs</Card.Header>
-                  <Card.Body>
-                    <Card.Text>Cette interface vous permet de gérer l'ensemble de vos parcs par clients ainsi que les capteurs qui leur sont associés.</Card.Text>
-                  </Card.Body>
-                  <Card.Footer>
-                    <LinkContainer to={"/gererparc"}>
-                      <Card.Link href="#"><small>Gestion des parcs</small></Card.Link>
-                    </LinkContainer>
-                  </Card.Footer>
-                </Card>
+                <CardHome title={'Gérer vos parcs'}
+                text={'Cette interface vous permet de gérer l\'ensemble de vos parcs par clients ainsi que les capteurs qui leur sont associés.'}
+                url={'/gererparc'}
+                link={'Gestion des parcs'} />
               </Col>
               <Col xs={12} sm={6} md={4}>
-                <Card>
-                  <Card.Header>Gérer vos capteurs</Card.Header>
-                  <Card.Body>
-                    <Card.Text>Cette interface vous permet de gérer l'ensemble de vos capteurs par clients et/ou parcs.</Card.Text>
-                  </Card.Body>
-                  <Card.Footer>
-                    <LinkContainer to={"/gerercapteur"}>
-                      <Card.Link href="#"><small>Gestion des capteurs</small></Card.Link>
-                    </LinkContainer>
-                  </Card.Footer>
-                </Card>
+                <CardHome title={'Gérer vos capteurs'}
+                text={'Cette interface vous permet de gérer l\'ensemble de vos capteurs par clients et/ou parcs.'}
+                url={'/gerercapteur'}
+                link={'Gestion des capteurs'} />
               </Col>
             </CardDeck>
           </Row>
