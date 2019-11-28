@@ -1,7 +1,11 @@
 import React, { Component } from 'react'
 import { Container, Row, Col, Table, Modal, Button } from 'react-bootstrap'
+import { connect } from "react-redux"
+import { bindActionCreators } from "redux"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from 'axios'
+
+import { getCapteurs } from '../../actions/CapteurAction'
 
 import UpdateCapteur from './UpdateCapteur'
 
@@ -12,7 +16,6 @@ class GererCapteur extends Component {
     this.state = {
       clients: [],
       parcs: [],
-      capteurs: [],
       updateCapteur: [],
       deleteCapteur: '',
       capteurNom: '',
@@ -32,9 +35,7 @@ class GererCapteur extends Component {
     .then(res => this.setState({ parcs: res }))
     .catch(err => console.log(err))
 
-    this.getCapteurs()
-    .then(res => this.setState({ capteurs: res }))
-    .catch(err => console.log(err))
+    this.props.getCapteurs()
   }
 
   finishedUpdate() {
@@ -73,15 +74,6 @@ class GererCapteur extends Component {
   }
 
   // --------->> Gestion des Capteurs <<---------
-  getCapteurs = async () => {
-    const response = await axios.get('/capteurs')
-    const body = await response.data
-
-    if (response.status !== 200) {
-      throw Error(body.message)
-    }
-    return body
-  }
 
   updateCapteur = async (capteurID) => {
     const getCapteur = await axios.get('/capteurs/' + capteurID)
@@ -108,7 +100,7 @@ class GererCapteur extends Component {
   }
 
   render() {
-    const displayCapteurs = this.state.capteurs.length > 0 && this.state.capteurs.map(capteur => {
+    const displayCapteurs = this.props.capteurs.length > 0 && this.props.capteurs.map(capteur => {
       const clientName = this.state.clients.map(client => {
         if(client._id === capteur.clientID) return client.nom
         return true
@@ -189,4 +181,16 @@ class GererCapteur extends Component {
   }
 }
 
-export default GererCapteur
+const mapStateToProps = state => {
+  return {
+    capteurs: state.capteurs.capteurs
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    getCapteurs
+  }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(GererCapteur)
