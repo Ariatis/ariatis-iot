@@ -5,7 +5,7 @@ import { bindActionCreators } from "redux"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from 'axios'
 
-import { getCapteurs } from '../../actions/CapteurAction'
+import { getCapteurs, getOneCapteur, deleteCapteurs } from '../../actions/CapteurAction'
 
 import UpdateCapteur from './UpdateCapteur'
 
@@ -16,7 +16,6 @@ class GererCapteur extends Component {
     this.state = {
       clients: [],
       parcs: [],
-      updateCapteur: [],
       deleteCapteur: '',
       capteurNom: '',
       clientNom: '',
@@ -43,11 +42,11 @@ class GererCapteur extends Component {
   }
 
   handleClose() {
-    this.setState({ show: false });
+    this.setState({ show: false })
   }
 
   handleShow(capteurID, capteurNom, clientNom, parcNom) {
-    this.setState({ show: true, deleteCapteur: capteurID, capteurNom: capteurNom, clientNom: clientNom, parcNom: parcNom });
+    this.setState({ show: true, deleteCapteur: capteurID, capteurNom: capteurNom, clientNom: clientNom, parcNom: parcNom })
   }
 
   // CRUD Operations
@@ -74,29 +73,14 @@ class GererCapteur extends Component {
   }
 
   // --------->> Gestion des Capteurs <<---------
-
-  updateCapteur = async (capteurID) => {
-    const getCapteur = await axios.get('/capteurs/' + capteurID)
-    const response = await getCapteur.data
-
-    this.setState({ updateCapteur: response, update: true })
-    return response
+  updateCapteur = (capteurID) => {
+    this.props.getOneCapteur(capteurID)
+    this.setState({ update: true })
   }
 
-  deleteCapteur = async () => {
-    const deleteCapteur = await axios.delete('/capteurs/' + this.state.deleteCapteur)
-    const response = await deleteCapteur.data
-
-    if(response.ok === 1) {
-      const getCapteurs = await axios.get('/capteurs')
-      const response = getCapteurs.data
-
-      this.setState({ capteurs: response, show: false })
-
-      return response
-    }
-
-    return response
+  deleteCapteur = () => {
+    this.props.deleteCapteurs(this.state.deleteCapteur)
+    this.setState({ show: false })
   }
 
   render() {
@@ -136,7 +120,7 @@ class GererCapteur extends Component {
           <Row>
             <Col xs={12}>
               {this.state.update
-                ? <UpdateCapteur data={this.state.updateCapteur} handler={this.finishedUpdate.bind(this)} />
+                ? <UpdateCapteur data={this.props.oneCapteur} handler={this.finishedUpdate.bind(this)} />
                 : <Table striped bordered hover responsive>
                   <thead>
                     <tr>
@@ -183,13 +167,15 @@ class GererCapteur extends Component {
 
 const mapStateToProps = state => {
   return {
-    capteurs: state.capteurs.capteurs
+    capteurs: state.capteurs.capteurs,
+    oneCapteur: state.capteurs.oneCapteur,
+    update: state.capteurs.update
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    getCapteurs
+    getCapteurs, getOneCapteur, deleteCapteurs
   }, dispatch)
 }
 

@@ -212,6 +212,33 @@ app.post('/capteurs', (req, res) => {
   })
 })
 
+//---->>>> UPDATE CAPTEURS <<<<----
+app.put('/capteurs/:id', function(req, res) {
+  let newData = req.body
+
+  let update = {
+    '$set': {
+      nom: newData.nom,
+      refModele: newData.refModele,
+      constructeur: newData.constructeur,
+      typeMesure: newData.typeMesure,
+      uniteMesure: newData.uniteMesure,
+      reseau: newData.reseau,
+      latitude: newData.latitude,
+      longitude: newData.longitude
+    }
+  };
+
+  let options = {new: false};
+
+  Capteurs.updateOne({_id: req.params.id}, update, options, function(err, data) {
+    if(err) {
+      throw err;
+    }
+    res.json(data);
+  })
+})
+
 //---->>>> DELETE CAPTEUR <<<<----
 app.delete('/capteurs/:id', function(req, res) {
   Capteurs.deleteOne({_id: req.params.id}, function(err, data) {

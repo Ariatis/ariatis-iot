@@ -1,53 +1,80 @@
-export function capteurReducer(state={capteurs:[]}, action) {
+export function capteurReducer(state={capteurs:[], oneCapteur:{}}, action) {
   switch(action.type) {
-    // GET
+    // GET ALL
     case "GET_CAPTEURS":
-      return {...state, capteurs:[...action.payload]};
+      return {...state, capteurs:[...action.payload]}
 
     case "GET_CAPTEURS_REJECTED":
-      return action.payload;
+      return action.payload
+
+    // GET ONE
+    case "GET_ONE_CAPTEUR":
+      return {...state, oneCapteur:action.payload}
+
+    case "GET_ONE_CAPTEUR_REJECTED":
+      return action.payload
 
     // POST
     case "POST_CAPTEURS":
-      return {...state, capteurs:[...state.capteurs, action.payload]};
+      return {...state, capteurs:[...state.capteurs, action.payload]}
 
     case "POST_CAPTEURS_REJECTED":
-      return action.payload;
+      return action.payload
 
     // DELETE
     case "DELETE_CAPTEURS":
-      const currentArmeToDelete = state.capteurs.filter(capteur => capteur._id !== action.payload);
+      const currentDataToDelete = state.capteurs.filter(capteur => capteur._id !== action.payload)
 
-      return {...state, capteurs:currentArmeToDelete};
+      return {...state, capteurs:currentDataToDelete}
 
     case "DELETE_CAPTEURS_REJECTED":
-      return action.payload;
+      return action.payload
 
     // UPDATE
     case "UPDATE_CAPTEURS":
+      if(action.payload.ok > 0) {
+        const capteursArray = [...state.capteurs]
+        const newDatas = action.datas
+        let oldCapteur = capteursArray[capteursArray.findIndex(capteur => capteur._id === action.id)]
+        const newCapteur = {
+          _id: oldCapteur._id,
+          clientID: oldCapteur.clientID,
+          parcID: oldCapteur.parcID,
+          constructeur: newDatas.constructeur,
+          latitude: newDatas.latitude,
+          longitude: newDatas.longitude,
+          nom: newDatas.nom,
+          refModele: newDatas.refModele,
+          reseau: newDatas.reseau,
+          typeMesure: newDatas.typeMesure,
+          uniteMesure: newDatas.uniteMesure
+        }
+        capteursArray[capteursArray.findIndex(capteur => capteur._id === action.id)] = newCapteur
 
-      const capteursArray = [...state.capteurs];
-      const newCapteurs = action.datas;
-      capteursArray[capteursArray.findIndex(capteur => capteur._id === action.id)] = newCapteurs;
-
-      return {
-        ...state,
-        capteurs: capteursArray,
-        payload: action.payload,
-        msg:'Votre capteur a bien été modifié',
-        style:'success'
-      };
+        return {
+          ...state,
+          capteurs: capteursArray,
+          msg:'Votre capteur a bien été modifié',
+          style:'success'
+        }
+      } else {
+        return {
+          ...state,
+          msg:'Aucun capteur n\'a été modifié',
+          style:'alert'
+        }
+      }
 
     case "UPDATE_CAPTEURS_REJECTED":
       return {
         ...state,
-        payload:action.payload,
+        payload: action.payload,
         msg:'Oups quelque chose s\'est mal déroulé ! Réessayez plus tard.',
         style:'danger'
-      };
+      }
 
     // DEFAULT
     default:
-      return state;
+      return state
   }
-};
+}

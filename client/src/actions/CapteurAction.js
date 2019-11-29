@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-// GET CAPTEUR
+// GET ALL CAPTEURS
 export function getCapteurs() {
   return function(dispatch) {
     axios.get('/capteurs')
@@ -9,6 +9,19 @@ export function getCapteurs() {
     })
     .catch(function(err) {
       dispatch({ type:"GET_CAPTEURS_REJECTED", payload:err })
+    })
+  }
+}
+
+// GET ONE CAPTEUR
+export function getOneCapteur(id) {
+  return function(dispatch) {
+    axios.get('/capteurs/' + id)
+    .then(function(response) {
+      dispatch({ type:"GET_ONE_CAPTEUR", payload:response.data })
+    })
+    .catch(function(err) {
+      dispatch({ type:"GET_ONE_CAPTEUR_REJECTED", payload:err })
     })
   }
 }

@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
 import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap'
-import axios from 'axios'
+import { connect } from "react-redux"
+import { bindActionCreators } from "redux"
+
+import { updateCapteurs } from '../../actions/CapteurAction'
 
 class UpdateParc extends Component {
   modifyCapteur(capteurID) {
@@ -12,11 +15,11 @@ class UpdateParc extends Component {
       uniteMesure: document.getElementById('uniteMesure').value,
       reseau: document.getElementById('reseau').value,
       latitude: document.getElementById('latitude').value,
-      longitude: document.getElementById('longitude').value
+      longitude: document.getElementById('longitude').value,
     }
-    axios.put('/capteurs/' + capteurID, data)
-    .then(this.props.handler)
-    .catch(err => console.log(err))
+
+    this.props.updateCapteurs(capteurID, data)
+    this.props.handler()
   }
 
   render() {
@@ -30,9 +33,9 @@ class UpdateParc extends Component {
                   <Card.Title>Modifier un parc</Card.Title>
                 </Card.Header>
                 <Card.Body>
-                  {this.props.data.map((capteur, i) => {
+                  {this.props.data.length > 0 && this.props.data.map((capteur, i) => {
                     return (
-                      <Form key={i} onSubmit={this.modifyCapteur.bind(this, capteur._id)}>
+                      <Form key={i}>
                         <Form.Group controlId="nomCapteur">
                           <Form.Label>Nom du capteur</Form.Label>
                           <Form.Control type="text" defaultValue={capteur.nom} name='nomCapteur' />
@@ -88,7 +91,7 @@ class UpdateParc extends Component {
                         </Form.Group>
 
                         <Button onClick={this.props.handler}>Retour</Button>
-                        <Button type="submit">Modifier votre capteur</Button>
+                        <Button onClick={this.modifyCapteur.bind(this, capteur._id)}>Modifier votre capteur</Button>
                       </Form>
                     )
                   })}
@@ -102,4 +105,10 @@ class UpdateParc extends Component {
   }
 }
 
-export default UpdateParc
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    updateCapteurs
+  }, dispatch)
+}
+
+export default connect(null, mapDispatchToProps)(UpdateParc)
