@@ -11,6 +11,9 @@ export function capteurReducer(state={capteurs:[], oneCapteur:{}}, action) {
     case "GET_ONE_CAPTEUR":
       return {...state, oneCapteur:action.payload}
 
+    case "CLEAR_ONE_CAPTEUR":
+      return {...state, oneCapteur:action.payload}
+
     case "GET_ONE_CAPTEUR_REJECTED":
       return action.payload
 

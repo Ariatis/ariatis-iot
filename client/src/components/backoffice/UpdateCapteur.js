@@ -3,9 +3,15 @@ import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap'
 import { connect } from "react-redux"
 import { bindActionCreators } from "redux"
 
-import { updateCapteurs } from '../../actions/CapteurAction'
+import { updateCapteurs, getOneCapteur } from '../../actions/CapteurAction'
 
-class UpdateParc extends Component {
+class UpdateCapteur extends Component {
+  constructor(props) {
+    super(props)
+
+    this.props.getOneCapteur(this.props.capteurID)
+  }
+
   modifyCapteur(capteurID) {
     let data = {
       nom: document.getElementById('nomCapteur').value,
@@ -33,7 +39,7 @@ class UpdateParc extends Component {
                   <Card.Title>Modifier un parc</Card.Title>
                 </Card.Header>
                 <Card.Body>
-                  {this.props.data.length > 0 && this.props.data.map((capteur, i) => {
+                  {this.props.oneCapteur.length > 0 && this.props.oneCapteur.map((capteur, i) => {
                     return (
                       <Form key={i}>
                         <Form.Group controlId="nomCapteur">
@@ -105,10 +111,16 @@ class UpdateParc extends Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    oneCapteur: state.capteurs.oneCapteur
+  }
+}
+
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    updateCapteurs
+    updateCapteurs, getOneCapteur
   }, dispatch)
 }
 
-export default connect(null, mapDispatchToProps)(UpdateParc)
+export default connect(mapStateToProps, mapDispatchToProps)(UpdateCapteur)

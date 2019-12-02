@@ -26,6 +26,12 @@ export function getOneCapteur(id) {
   }
 }
 
+export function clearOneCapteur() {
+  return function(dispatch) {
+    dispatch({ type:"CLEAR_ONE_CAPTEUR", payload: []})
+  }
+}
+
 // POST CAPTEUR
 export function postCapteurs(capteurs) {
   return function(dispatch) {

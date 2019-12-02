@@ -5,7 +5,7 @@ import { bindActionCreators } from "redux"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from 'axios'
 
-import { getCapteurs, getOneCapteur, deleteCapteurs } from '../../actions/CapteurAction'
+import { getCapteurs, deleteCapteurs, clearOneCapteur } from '../../actions/CapteurAction'
 
 import UpdateCapteur from './UpdateCapteur'
 
@@ -17,6 +17,7 @@ class GererCapteur extends Component {
       clients: [],
       parcs: [],
       deleteCapteur: '',
+      updateCapteur: '',
       capteurNom: '',
       clientNom: '',
       parcNom: '',
@@ -38,7 +39,8 @@ class GererCapteur extends Component {
   }
 
   finishedUpdate() {
-    this.setState({ update:false })
+    this.props.clearOneCapteur()
+    this.setState({ updateCapteur: '', update: !this.state.update })
   }
 
   handleClose() {
@@ -47,6 +49,10 @@ class GererCapteur extends Component {
 
   handleShow(capteurID, capteurNom, clientNom, parcNom) {
     this.setState({ show: true, deleteCapteur: capteurID, capteurNom: capteurNom, clientNom: clientNom, parcNom: parcNom })
+  }
+
+  updateCapteur(capteurID) {
+    this.setState({ updateCapteur: capteurID, update: !this.state.update })
   }
 
   // CRUD Operations
@@ -73,11 +79,6 @@ class GererCapteur extends Component {
   }
 
   // --------->> Gestion des Capteurs <<---------
-  updateCapteur = (capteurID) => {
-    this.props.getOneCapteur(capteurID)
-    this.setState({ update: true })
-  }
-
   deleteCapteur = () => {
     this.props.deleteCapteurs(this.state.deleteCapteur)
     this.setState({ show: false })
@@ -120,7 +121,7 @@ class GererCapteur extends Component {
           <Row>
             <Col xs={12}>
               {this.state.update
-                ? <UpdateCapteur data={this.props.oneCapteur} handler={this.finishedUpdate.bind(this)} />
+                ? <UpdateCapteur capteurID={this.state.updateCapteur} handler={this.finishedUpdate.bind(this)} />
                 : <Table striped bordered hover responsive>
                   <thead>
                     <tr>
@@ -167,15 +168,13 @@ class GererCapteur extends Component {
 
 const mapStateToProps = state => {
   return {
-    capteurs: state.capteurs.capteurs,
-    oneCapteur: state.capteurs.oneCapteur,
-    update: state.capteurs.update
+    capteurs: state.capteurs.capteurs
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    getCapteurs, getOneCapteur, deleteCapteurs
+    getCapteurs, deleteCapteurs, clearOneCapteur
   }, dispatch)
 }
 
