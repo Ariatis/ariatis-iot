@@ -3,7 +3,7 @@ import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap'
 import { connect } from "react-redux"
 import { bindActionCreators } from "redux"
 
-import { updateCapteurs, getOneCapteur } from '../../actions/CapteurAction'
+import { updateCapteur, getOneCapteur } from '../../actions/CapteurAction'
 
 class UpdateCapteur extends Component {
   constructor(props) {
@@ -24,7 +24,7 @@ class UpdateCapteur extends Component {
       longitude: document.getElementById('longitude').value,
     }
 
-    this.props.updateCapteurs(capteurID, data)
+    this.props.updateCapteur(capteurID, data)
     this.props.handler()
   }
 
@@ -119,7 +119,7 @@ const mapStateToProps = state => {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    updateCapteurs, getOneCapteur
+    updateCapteur, getOneCapteur
   }, dispatch)
 }
 

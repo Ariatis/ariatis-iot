@@ -18,23 +18,23 @@ export function capteurReducer(state={capteurs:[], oneCapteur:{}}, action) {
       return action.payload
 
     // POST
-    case "POST_CAPTEURS":
+    case "POST_CAPTEUR":
       return {...state, capteurs:[...state.capteurs, action.payload]}
 
-    case "POST_CAPTEURS_REJECTED":
+    case "POST_CAPTEUR_REJECTED":
       return action.payload
 
     // DELETE
-    case "DELETE_CAPTEURS":
+    case "DELETE_CAPTEUR":
       const currentDataToDelete = state.capteurs.filter(capteur => capteur._id !== action.payload)
 
       return {...state, capteurs:currentDataToDelete}
 
-    case "DELETE_CAPTEURS_REJECTED":
+    case "DELETE_CAPTEUR_REJECTED":
       return action.payload
 
     // UPDATE
-    case "UPDATE_CAPTEURS":
+    case "UPDATE_CAPTEUR":
       if(action.payload.ok > 0) {
         const capteursArray = [...state.capteurs]
         const newDatas = action.datas
@@ -68,7 +68,7 @@ export function capteurReducer(state={capteurs:[], oneCapteur:{}}, action) {
         }
       }
 
-    case "UPDATE_CAPTEURS_REJECTED":
+    case "UPDATE_CAPTEUR_REJECTED":
       return {
         ...state,
         payload: action.payload,

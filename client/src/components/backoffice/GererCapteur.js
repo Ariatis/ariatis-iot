@@ -3,9 +3,10 @@ import { Container, Row, Col, Table, Modal, Button } from 'react-bootstrap'
 import { connect } from "react-redux"
 import { bindActionCreators } from "redux"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import axios from 'axios'
 
-import { getCapteurs, deleteCapteurs, clearOneCapteur } from '../../actions/CapteurAction'
+import { getCapteurs, deleteCapteur, clearOneCapteur } from '../../actions/CapteurAction'
+import { getClients } from '../../actions/ClientAction'
+import { getParcs } from '../../actions/ParcAction'
 
 import UpdateCapteur from './UpdateCapteur'
 
@@ -13,9 +14,11 @@ class GererCapteur extends Component {
   constructor(props) {
     super(props)
 
+    this.props.getCapteurs()
+    this.props.getClients()
+    this.props.getParcs()
+
     this.state = {
-      clients: [],
-      parcs: [],
       deleteCapteur: '',
       updateCapteur: '',
       capteurNom: '',
@@ -24,18 +27,6 @@ class GererCapteur extends Component {
       update: false,
       show: false
     }
-  }
-
-  componentDidMount() {
-    this.getClients()
-    .then(res => this.setState({ clients: res }))
-    .catch(err => console.log(err))
-
-    this.getParcs()
-    .then(res => this.setState({ parcs: res }))
-    .catch(err => console.log(err))
-
-    this.props.getCapteurs()
   }
 
   finishedUpdate() {
@@ -55,43 +46,19 @@ class GererCapteur extends Component {
     this.setState({ updateCapteur: capteurID, update: !this.state.update })
   }
 
-  // CRUD Operations
-  // --------->> Gestion des Clients <<---------
-  getClients = async () => {
-    const response = await axios.get('/clients')
-    const body = await response.data
-
-    if (response.status !== 200) {
-      throw Error(body.message)
-    }
-    return body
-  }
-
-  // --------->> Gestion des Parcs <<---------
-  getParcs = async () => {
-    const response = await axios.get('/parcs')
-    const body = await response.data
-
-    if (response.status !== 200) {
-      throw Error(body.message)
-    }
-    return body
-  }
-
-  // --------->> Gestion des Capteurs <<---------
-  deleteCapteur = () => {
-    this.props.deleteCapteurs(this.state.deleteCapteur)
+  deleteCapteur() {
+    this.props.deleteCapteur(this.state.deleteCapteur)
     this.setState({ show: false })
   }
 
   render() {
     const displayCapteurs = this.props.capteurs.length > 0 && this.props.capteurs.map(capteur => {
-      const clientName = this.state.clients.map(client => {
+      const clientName = this.props.clients.map(client => {
         if(client._id === capteur.clientID) return client.nom
         return true
       })
 
-      const parcName = this.state.parcs.map(parc => {
+      const parcName = this.props.parcs.map(parc => {
         if(parc._id === capteur.parcID) return parc.nom
         return true
       })
@@ -168,13 +135,17 @@ class GererCapteur extends Component {
 
 const mapStateToProps = state => {
   return {
-    capteurs: state.capteurs.capteurs
+    capteurs: state.capteurs.capteurs,
+    clients: state.clients.clients,
+    parcs: state.parcs.parcs
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    getCapteurs, deleteCapteurs, clearOneCapteur
+    getCapteurs, deleteCapteur, clearOneCapteur,
+    getClients,
+    getParcs
   }, dispatch)
 }
 
