@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/static/css/main.86e6cbff.chunk.css",
-    "main.js": "/static/js/main.27c2b930.chunk.js",
-    "main.js.map": "/static/js/main.27c2b930.chunk.js.map",
+    "main.js": "/static/js/main.e87c90f7.chunk.js",
+    "main.js.map": "/static/js/main.e87c90f7.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.03f39fd1.js",
     "runtime-main.js.map": "/static/js/runtime-main.03f39fd1.js.map",
     "static/js/2.539cbd7d.chunk.js": "/static/js/2.539cbd7d.chunk.js",
     "static/js/2.539cbd7d.chunk.js.map": "/static/js/2.539cbd7d.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.b15f724315fdeea461ac16ad50923019.js": "/precache-manifest.b15f724315fdeea461ac16ad50923019.js",
+    "precache-manifest.645cd17083dcf4fe0df396b2ad8c2150.js": "/precache-manifest.645cd17083dcf4fe0df396b2ad8c2150.js",
     "service-worker.js": "/service-worker.js",
     "static/css/main.86e6cbff.chunk.css.map": "/static/css/main.86e6cbff.chunk.css.map",
     "static/media/ariatis_logo_full.png": "/static/media/ariatis_logo_full.3163df45.png"
@@ -17,6 +17,6 @@
     "static/js/runtime-main.03f39fd1.js",
     "static/js/2.539cbd7d.chunk.js",
     "static/css/main.86e6cbff.chunk.css",
-    "static/js/main.27c2b930.chunk.js"
+    "static/js/main.e87c90f7.chunk.js"
   ]
 }
