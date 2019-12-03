@@ -34,7 +34,7 @@ export function clientReducer(state={clients:[], oneClient:{}}, action) {
 
     // POST
     case "POST_CLIENT":
-      return {...state, clients:[...state.clients, action.payload]}
+      return {...state, postClients:action.payload}
 
     case "POST_CLIENT_REJECTED":
       return action.payload
