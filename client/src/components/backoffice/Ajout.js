@@ -84,7 +84,7 @@ class Ajout extends Component {
     let parcDesc = document.getElementById('parcDesc').value
 
     let data = {
-      "clientID": this.state.client.id,
+      "clientID": this.props.postClients._id,
       "nom": parcName,
       "description": parcDesc
     }
@@ -118,8 +118,8 @@ class Ajout extends Component {
     let longitude = document.getElementById('longitude').value
 
     let data = {
-      "clientID": this.state.client.id,
-      "parcID": this.state.parc.id,
+      "clientID": this.props.postClients._id,
+      "parcID": this.props.postParcs._id,
       "nom": nomCapteur,
       "refModele": refModele,
       "constructeur": constructeur,
@@ -288,6 +288,13 @@ class Ajout extends Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    postClients: state.clients.postClients,
+    postParcs: state.parcs.postParcs
+  }
+}
+
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     postClient, updateClient,
@@ -296,4 +303,4 @@ function mapDispatchToProps(dispatch) {
   }, dispatch)
 }
 
-export default connect(null, mapDispatchToProps)(Ajout)
+export default connect(mapStateToProps, mapDispatchToProps)(Ajout)

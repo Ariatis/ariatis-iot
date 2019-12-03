@@ -34,7 +34,7 @@ export function parcReducer(state={parcs:[], oneParc:{}}, action) {
 
     // POST
     case "POST_PARC":
-      return {...state, parcs:[...state.parcs, action.payload]}
+      return {...state, postParcs:action.payload}
 
     case "POST_PARC_REJECTED":
       return action.payload

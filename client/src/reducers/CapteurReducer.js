@@ -19,7 +19,7 @@ export function capteurReducer(state={capteurs:[], oneCapteur:{}}, action) {
 
     // POST
     case "POST_CAPTEUR":
-      return {...state, capteurs:[...state.capteurs, action.payload]}
+      return {...state, postCapteurs:action.payload}
 
     case "POST_CAPTEUR_REJECTED":
       return action.payload
