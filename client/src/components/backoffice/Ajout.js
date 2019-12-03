@@ -1,6 +1,11 @@
 import React, { Component } from 'react'
 import { Container, Row, Col, Button, Card, Form } from 'react-bootstrap'
-import axios from 'axios'
+import { connect } from "react-redux"
+import { bindActionCreators } from "redux"
+
+import { postClient, updateClient } from '../../actions/ClientAction'
+import { postParc, updateParc } from '../../actions/ParcAction'
+import { postCapteur, updateCapteur } from '../../actions/CapteurAction'
 
 class Ajout extends Component {
   constructor(props) {
@@ -61,19 +66,15 @@ class Ajout extends Component {
   }
 
   postClient(data) {
-    axios.post('/clients', data)
-    .then(res => {
-      this.setState({ client: {id:res.data._id, nom:res.data.nom, description:res.data.description} })
-      document.getElementById('ajout-client').style.display = 'none'
-      document.getElementById('ajout-parc').style.display = 'block'
-      document.getElementById("ajout-client-form").reset()
-    })
-    .catch(err => console.log(err))
+    this.props.postClient(data)
+    this.setState({ client: {nom:data.nom, description:data.description} })
+    document.getElementById('ajout-client').style.display = 'none'
+    document.getElementById('ajout-parc').style.display = 'block'
+    document.getElementById("ajout-client-form").reset()
   }
 
   updateClient(id, data) {
-    axios.put('/clients/' + id, data)
-    .catch(err => console.log(err))
+    this.props.updateClient(id, data)
   }
 
   // --------->> Gestion des Parcs <<---------
@@ -92,19 +93,15 @@ class Ajout extends Component {
   }
 
   postParc(data) {
-    axios.post('/parcs', data)
-    .then(res => {
-      this.setState({ parc: {id:res.data._id, nom:res.data.nom, description:res.data.description} })
-      document.getElementById('ajout-parc').style.display = 'none'
-      document.getElementById('ajout-capteur').style.display = 'block'
-      document.getElementById("ajout-parc-form").reset()
-    })
-    .catch(err => console.log(err))
+    this.props.postParc(data)
+    this.setState({ parc: {nom:data.nom, description:data.description} })
+    document.getElementById('ajout-parc').style.display = 'none'
+    document.getElementById('ajout-capteur').style.display = 'block'
+    document.getElementById("ajout-parc-form").reset()
   }
 
   updateParc(id, data) {
-    axios.put('/parcs/' + id, data)
-    .catch(err => console.log(err))
+    this.props.updateParc(id, data)
   }
 
   // --------->> Gestion des Capteurs <<---------
@@ -139,19 +136,15 @@ class Ajout extends Component {
   }
 
   postCapteur(data) {
-    axios.post('/capteurs', data)
-    .then(res => {
-      let newArray = [...this.state.capteur]
-      newArray.push(data)
-      this.setState({ capteur: newArray })
-      document.getElementById("ajout-capteur-form").reset()
-    })
-    .catch(err => console.log(err))
+    this.props.postCapteur(data)
+    let newArray = [...this.state.capteur]
+    newArray.push(data)
+    this.setState({ capteur: newArray })
+    document.getElementById("ajout-capteur-form").reset()
   }
 
   updateCapteur(id, data) {
-    axios.put('/capteurs/' + id, data)
-    .catch(err => console.log(err))
+    this.props.updateCapteur(id, data)
   }
 
   render() {
@@ -295,4 +288,12 @@ class Ajout extends Component {
   }
 }
 
-export default Ajout
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    postClient, updateClient,
+    postParc, updateParc,
+    postCapteur, updateCapteur
+  }, dispatch)
+}
+
+export default connect(null, mapDispatchToProps)(Ajout)

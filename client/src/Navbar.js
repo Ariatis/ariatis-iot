@@ -12,7 +12,18 @@ export default class Navbars extends Component {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
-            <NavDropdown title="Gestion..." id="basic-nav-dropdown">
+            <NavDropdown title="Espace de création" id="basic-nav-dropdown">
+              <LinkContainer to={"/creationclient"}>
+                <Nav.Link eventKey={4}>Nouveau client</Nav.Link>
+              </LinkContainer>
+              <LinkContainer to={"/"}>
+                <Nav.Link eventKey={5}>Nouveau parc</Nav.Link>
+              </LinkContainer>
+              <LinkContainer to={"/"}>
+                <Nav.Link eventKey={6}>Nouveau capteur</Nav.Link>
+              </LinkContainer>
+            </NavDropdown>
+            <NavDropdown title="Espace de gestion" id="basic-nav-dropdown">
               <LinkContainer to={"/gererclient"}>
                 <Nav.Link eventKey={1}>des clients</Nav.Link>
               </LinkContainer>
@@ -23,9 +34,6 @@ export default class Navbars extends Component {
                 <Nav.Link eventKey={3}>des capteurs</Nav.Link>
               </LinkContainer>
             </NavDropdown>
-            <LinkContainer to={"/creationclient"}>
-              <Nav.Link eventKey={4}>Créer un client</Nav.Link>
-            </LinkContainer>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
