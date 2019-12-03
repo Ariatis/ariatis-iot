@@ -1,16 +1,16 @@
 import React, { Component } from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
 
-import Ajout from '../components/backoffice/Ajout'
+import AddClient from '../components/backoffice/AddClient'
 
-class Home extends Component {
+class CreationClient extends Component {
   render() {
     return (
       <section id="creation">
         <Container>
           <Row>
             <Col xs={12}>
-              <Ajout />
+              <AddClient />
             </Col>
           </Row>
         </Container>
@@ -19,4 +19,4 @@ class Home extends Component {
   }
 }
 
-export default Home
+export default CreationClient
