@@ -26,15 +26,15 @@ class Home extends Component {
               </Col>
               <Col xs={12} sm={6} md={4}>
                 <CardHome title={'Créer un parc'}
-                text={'Cette interface vous permet de créer un parc en l\'associant à un client puis ses capteurs.'}
+                text={'Cette interface vous permet de créer un parc en l\'associant à un client.'}
                 url={'/'}
-                link={'Créer un parc (feature en cours)'} />
+                link={'Créer un parc'} />
               </Col>
               <Col xs={12} sm={6} md={4}>
                 <CardHome title={'Créer vos capteurs'}
                 text={'Cette interface vous permet de créer vos capteurs en les associant à un client et un parc.'}
                 url={'/'}
-                link={'Créer les capteurs (feature en cours)'} />
+                link={'Créer les capteurs'} />
               </Col>
             </CardDeck>
           </Row>
