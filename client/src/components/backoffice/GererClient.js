@@ -1,7 +1,12 @@
 import React, { Component } from 'react'
 import { Container, Row, Col, Table, Modal, Button } from 'react-bootstrap'
+import { connect } from "react-redux"
+import { bindActionCreators } from "redux"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import axios from 'axios'
+
+import { getClients, deleteClient, clearOneClient } from '../../actions/ClientAction'
+import { getParcs } from '../../actions/ParcAction'
+import { getCapteurs } from '../../actions/CapteurAction'
 
 import UpdateClient from './UpdateClient'
 
@@ -9,34 +14,22 @@ class GererClient extends Component {
   constructor(props) {
     super(props)
 
+    this.props.getClients()
+    this.props.getParcs()
+    this.props.getCapteurs()
+
     this.state = {
-      clients: [],
-      updateClient: [],
+      updateClient: '',
       deleteClient: '',
       clientNom: '',
-      parcs: [],
-      capteurs: [],
       update: false,
       show: false
     }
   }
 
-  componentDidMount() {
-    this.getClients()
-    .then(res => this.setState({ clients: res }))
-    .catch(err => console.log(err))
-
-    this.getParcs()
-    .then(res => this.setState({ parcs: res }))
-    .catch(err => console.log(err))
-
-    this.getCapteurs()
-    .then(res => this.setState({ capteurs: res }))
-    .catch(err => console.log(err))
-  }
-
   finishedUpdate() {
-    this.setState({ update:false })
+    this.props.clearOneClient()
+    this.setState({ update: !this.state.update })
   }
 
   handleClose() {
@@ -47,84 +40,19 @@ class GererClient extends Component {
     this.setState({ show: true, deleteClient: clientID, clientNom: clientNom });
   }
 
-  // CRUD Operations
-  // --------->> Gestion des Clients <<---------
-  getClients = async () => {
-    const response = await axios.get('/clients')
-    const body = await response.data
-    const data = [...body]
-
-    data.sort((a,b) => {
-      let comparaison = 0
-      let nomA = a.nom
-      let nomB = b.nom
-
-      if(nomA.toLowerCase() > nomB.toLowerCase()) {
-        comparaison = 1
-      } else {
-        comparaison = -1
-      }
-
-      return comparaison
-    })
-
-    if (response.status !== 200) {
-      throw Error(body.message)
-    }
-
-    return data
+  deleteClient() {
+    this.props.deleteClient(this.state.deleteClient)
+    this.setState({ show: false })
   }
 
-  updateClient = async (clientID) => {
-    const getClient = await axios.get('/clients/' + clientID)
-    const response = await getClient.data
-
-    this.setState({ updateClient: response, update: true })
-    return response
-  }
-
-  deleteClient = async () => {
-    const deleteClient = await axios.delete('/clients/' + this.state.deleteClient)
-    const response = await deleteClient.data
-
-    if(response.ok === 1) {
-      const getClients = await axios.get('/clients')
-      const response = getClients.data
-
-      this.setState({ clients: response, show: false })
-
-      return response
-    }
-
-    return response
-  }
-
-  // --------->> Appel BDD des Parcs <<---------
-  getParcs = async () => {
-    const response = await axios.get('/parcs')
-    const body = await response.data
-
-    if (response.status !== 200) {
-      throw Error(body.message)
-    }
-    return body
-  }
-
-  // --------->> Appel BDD des Capteurs <<---------
-  getCapteurs = async () => {
-    const response = await axios.get('/capteurs')
-    const body = await response.data
-
-    if (response.status !== 200) {
-      throw Error(body.message)
-    }
-    return body
+  updateClient(clientID) {
+    this.setState({ updateClient: clientID, update: !this.state.update })
   }
 
   render() {
-    const displayClients = this.state.clients.length > 0 && this.state.clients.map((client, i) => {
+    const displayClients = this.props.clients.length > 0 && this.props.clients.map((client, i) => {
       let parcs = 0
-      this.state.parcs.map(parc => {
+      this.props.parcs.map(parc => {
         if(parc.clientID === client._id) {
           parcs += 1
         }
@@ -132,7 +60,7 @@ class GererClient extends Component {
       })
 
       let capteurs = 0
-      this.state.capteurs.map(capteur => {
+      this.props.capteurs.map(capteur => {
         if(capteur.clientID === client._id) {
           capteurs += 1
         }
@@ -159,7 +87,7 @@ class GererClient extends Component {
           <Row>
             <Col xs={12}>
               {this.state.update
-                ? <UpdateClient data={this.state.updateClient} handler={this.finishedUpdate.bind(this)} />
+                ? <UpdateClient clientID={this.state.updateClient} handler={this.finishedUpdate.bind(this)} />
                 : <Table striped bordered hover responsive>
                 <thead>
                   <tr>
@@ -197,4 +125,20 @@ class GererClient extends Component {
   }
 }
 
-export default GererClient
+const mapStateToProps = state => {
+  return {
+    clients: state.clients.clients,
+    capteurs: state.capteurs.capteurs,
+    parcs: state.parcs.parcs
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    getClients, deleteClient, clearOneClient,
+    getParcs,
+    getCapteurs
+  }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(GererClient)

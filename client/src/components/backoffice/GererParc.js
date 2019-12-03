@@ -1,7 +1,12 @@
 import React, { Component } from 'react'
 import { Container, Row, Col, Table, Modal, Button } from 'react-bootstrap'
+import { connect } from "react-redux"
+import { bindActionCreators } from "redux"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import axios from 'axios'
+
+import { getClients } from '../../actions/ClientAction'
+import { getParcs, deleteParc, clearOneParc } from '../../actions/ParcAction'
+import { getCapteurs } from '../../actions/CapteurAction'
 
 import UpdateParc from './UpdateParc'
 
@@ -9,34 +14,22 @@ class GererParc extends Component {
   constructor(props) {
     super(props)
 
+    this.props.getClients()
+    this.props.getParcs()
+    this.props.getCapteurs()
+
     this.state = {
-      clients: [],
-      parcs: [],
-      updateParc: [],
+      updateParc: '',
       deleteParc: '',
       parcNom: '',
-      capteurs: [],
       update: false,
       show: false
     }
   }
 
-  componentDidMount() {
-    this.getClients()
-    .then(res => this.setState({ clients: res }))
-    .catch(err => console.log(err))
-
-    this.getParcs()
-    .then(res => this.setState({ parcs: res }))
-    .catch(err => console.log(err))
-
-    this.getCapteurs()
-    .then(res => this.setState({ capteurs: res }))
-    .catch(err => console.log(err))
-  }
-
   finishedUpdate() {
-    this.setState({ update:false })
+    this.props.clearOneParc()
+    this.setState({ update: !this.state.update })
   }
 
   handleClose() {
@@ -47,90 +40,29 @@ class GererParc extends Component {
     this.setState({ show: true, deleteParc: parcID, parcNom: parcNom });
   }
 
-  // CRUD Operations
-  // --------->> Gestion des Clients <<---------
-  getClients = async () => {
-    const response = await axios.get('/clients')
-    const body = await response.data
-
-    if (response.status !== 200) {
-      throw Error(body.message)
-    }
-    return body
+  updateParc(parcID) {
+    this.setState({ updateParc: parcID, update: !this.state.update })
   }
 
-  // --------->> Gestion des Parcs <<---------
-  getParcs = async () => {
-    const response = await axios.get('/parcs')
-    const body = await response.data
-    const data = [...body]
-
-    data.sort((a,b) => {
-      let comparaison = 0
-      let nomA = a.nom
-      let nomB = b.nom
-
-      if(nomA.toLowerCase() > nomB.toLowerCase()) {
-        comparaison = 1
-      } else {
-        comparaison = -1
-      }
-
-      return comparaison
-    })
-
-    if (response.status !== 200) {
-      throw Error(body.message)
-    }
-    return data
-  }
-
-  updateParc = async (parcID) => {
-    const getParc = await axios.get('/parcs/' + parcID)
-    const response = await getParc.data
-
-    this.setState({ updateParc: response, update: true })
-    return response
-  }
-
-  deleteParc = async () => {
-    const deleteParc = await axios.delete('/parcs/' + this.state.deleteParc)
-    const response = await deleteParc.data
-
-    if(response.ok === 1) {
-      const getParcs = await axios.get('/parcs')
-      const response = getParcs.data
-
-      this.setState({ parcs: response, show: false })
-
-      return response
-    }
-
-    return response
-  }
-
-  // --------->> Gestion des Capteurs <<---------
-  getCapteurs = async () => {
-    const response = await axios.get('/capteurs')
-    const body = await response.data
-
-    if (response.status !== 200) {
-      throw Error(body.message)
-    }
-    return body
+  deleteParc() {
+    this.props.deleteParc(this.state.deleteParc)
+    this.setState({ show: false })
   }
 
   render() {
-    const displayParcs = this.state.parcs.length > 0 && this.state.parcs.map(parc => {
+    const displayParcs = this.props.parcs.length > 0 && this.props.parcs.map(parc => {
       let capteurs = 0
-      this.state.capteurs.map(capteur => {
+
+      this.props.capteurs.map(capteur => {
         if(capteur.parcID === parc._id) capteurs += 1
         return capteurs
       })
-      const clientName = this.state.clients.map(client => {
+
+      const clientName = this.props.clients.map(client => {
         if(client._id === parc.clientID) return client.nom
         return true
       })
+
       return (
         <tr key={parc._id} id={parc._id}>
           <td>{parc.nom}</td>
@@ -151,7 +83,7 @@ class GererParc extends Component {
           <Row>
             <Col xs={12}>
               {this.state.update
-                ? <UpdateParc data={this.state.updateParc} handler={this.finishedUpdate.bind(this)} />
+                ? <UpdateParc parcID={this.state.updateParc} handler={this.finishedUpdate.bind(this)} />
                 : <Table striped bordered hover responsive>
                   <thead>
                     <tr>
@@ -189,4 +121,20 @@ class GererParc extends Component {
   }
 }
 
-export default GererParc
+const mapStateToProps = state => {
+  return {
+    clients: state.clients.clients,
+    capteurs: state.capteurs.capteurs,
+    parcs: state.parcs.parcs
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    getClients,
+    getParcs, deleteParc, clearOneParc,
+    getCapteurs
+  }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(GererParc)
