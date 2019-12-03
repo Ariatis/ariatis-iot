@@ -16,10 +16,10 @@ export default class Navbars extends Component {
               <LinkContainer to={"/creationclient"}>
                 <Nav.Link eventKey={4}>Nouveau client</Nav.Link>
               </LinkContainer>
-              <LinkContainer to={"/"}>
+              <LinkContainer to={"/creationparc"}>
                 <Nav.Link eventKey={5}>Nouveau parc</Nav.Link>
               </LinkContainer>
-              <LinkContainer to={"/"}>
+              <LinkContainer to={"/creationcapteur"}>
                 <Nav.Link eventKey={6}>Nouveau capteur</Nav.Link>
               </LinkContainer>
             </NavDropdown>

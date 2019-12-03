@@ -7,7 +7,7 @@ import { postClient, updateClient } from '../../actions/ClientAction'
 import { postParc, updateParc } from '../../actions/ParcAction'
 import { postCapteur, updateCapteur } from '../../actions/CapteurAction'
 
-class Ajout extends Component {
+class AddClient extends Component {
   constructor(props) {
     super(props)
 
@@ -303,4 +303,4 @@ function mapDispatchToProps(dispatch) {
   }, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Ajout)
+export default connect(mapStateToProps, mapDispatchToProps)(AddClient)
