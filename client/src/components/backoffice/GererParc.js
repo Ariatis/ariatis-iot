@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { getClients } from '../../actions/ClientAction'
 import { getParcs, deleteParc, clearOneParc } from '../../actions/ParcAction'
-import { getCapteurs } from '../../actions/CapteurAction'
+import { getCapteurs, deleteCapteur } from '../../actions/CapteurAction'
 
 import UpdateParc from './UpdateParc'
 
@@ -46,6 +46,14 @@ class GererParc extends Component {
 
   deleteParc() {
     this.props.deleteParc(this.state.deleteParc)
+
+    this.props.capteurs.map(capteur => {
+      if(capteur.parcID === this.state.deleteParc) {
+        this.props.deleteCapteur(capteur._id)
+      }
+      return true
+    })
+
     this.setState({ show: false })
   }
 
@@ -105,7 +113,7 @@ class GererParc extends Component {
                 <Modal.Title>Suppression de votre parc: {this.state.parcNom}</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                <p>Etes vous certain de vouloir supprimer {this.state.parcNom} ?</p>
+                <p>Etes vous certain de vouloir supprimer {this.state.parcNom} ainsi que tous les capteurs associés ?</p>
                 <Button variant="secondary" onClick={this.handleClose.bind(this)}>
                   Annuler
                 </Button>
@@ -133,7 +141,7 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     getClients,
     getParcs, deleteParc, clearOneParc,
-    getCapteurs
+    getCapteurs, deleteCapteur
   }, dispatch)
 }
 

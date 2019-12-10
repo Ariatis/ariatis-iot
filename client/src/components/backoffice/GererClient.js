@@ -5,8 +5,8 @@ import { bindActionCreators } from "redux"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import { getClients, deleteClient, clearOneClient } from '../../actions/ClientAction'
-import { getParcs } from '../../actions/ParcAction'
-import { getCapteurs } from '../../actions/CapteurAction'
+import { getParcs, deleteParc } from '../../actions/ParcAction'
+import { getCapteurs, deleteCapteur } from '../../actions/CapteurAction'
 
 import UpdateClient from './UpdateClient'
 
@@ -42,6 +42,20 @@ class GererClient extends Component {
 
   deleteClient() {
     this.props.deleteClient(this.state.deleteClient)
+    this.props.parcs.map(parc => {
+      if(parc.clientID === this.state.deleteClient) {
+        this.props.deleteParc(parc._id)
+      }
+      return true
+    })
+
+    this.props.capteurs.map(capteur => {
+      if(capteur.clientID === this.state.deleteClient) {
+        this.props.deleteCapteur(capteur._id)
+      }
+      return true
+    })
+
     this.setState({ show: false })
   }
 
@@ -109,7 +123,7 @@ class GererClient extends Component {
                 <Modal.Title>Suppression de votre client {this.state.clientNom}</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                <p>Etes-vous certain de vouloir supprimer  {this.state.clientNom} ?</p>
+                <p>Etes-vous certain de vouloir supprimer  {this.state.clientNom} ainsi que tous les parcs et capteurs liés à ce client ?</p>
                 <Button variant="secondary" onClick={this.handleClose.bind(this)}>
                   Annuler
                 </Button>
@@ -136,8 +150,8 @@ const mapStateToProps = state => {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     getClients, deleteClient, clearOneClient,
-    getParcs,
-    getCapteurs
+    getParcs, deleteParc,
+    getCapteurs, deleteCapteur
   }, dispatch)
 }
 
